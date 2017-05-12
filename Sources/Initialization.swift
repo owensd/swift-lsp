@@ -7,18 +7,20 @@ import JSONLib
 
 /// The set of parameters that are used for the `initialize` method.
 public struct InitializeParams {
-	 /// The process Id of the parent process that started the server. Is `null` if the process
-     /// has not been started by another process.
-	 /// If the parent process is not alive then the server should exit (see exit notification)
-     /// its process.
-	public var processId: Int?
+    public init() {}
 
-	 /// The rootPath of the workspace. Is `null` if no folder is open.
+	/// The process Id of the parent process that started the server. Is `null` if the process
+    /// has not been started by another process.
+	/// If the parent process is not alive then the server should exit (see exit notification)
+    /// its process.
+	public var processId: Int? = nil
+
+	/// The rootPath of the workspace. Is `null` if no folder is open.
 	@available(*, deprecated:3.0, message: "The `rootUri` member should be used instead.")
 	public var rootPath: String? = nil
 
-	 /// The root URI of the workspace. Is `null`` if no folder is open. If both `rootPath` and
-     /// `rootUri` are set, `rootUri` wins.
+	/// The root URI of the workspace. Is `null`` if no folder is open. If both `rootPath` and
+    /// `rootUri` are set, `rootUri` wins.
 	public var rootUri: DocumentUri? = nil
 
 	/// User provided initialization options.
@@ -33,6 +35,10 @@ public struct InitializeParams {
 
 /// The response to an `Initialize` request.
 public struct InitializeResult {
+    public init(capabilities: ServerCapabilities) {
+        self.capabilities = capabilities
+    }
+
     /// This should return all of the capabilities that the server supports.
     public var capabilities: ServerCapabilities
 }

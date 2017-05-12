@@ -9,6 +9,10 @@
 ///   method: `$/cancelRequest`
 ///   params: `CancelParams` defined as follows:
 public struct CancelParams {
+    public init(id: RequestId) {
+        self.id = id
+    }
+    
     /// The ID of the request to cancel.
     public var id: RequestId
 }

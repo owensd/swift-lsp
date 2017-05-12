@@ -9,6 +9,11 @@ public typealias DocumentUri = String
 /// Position in a text document expressed as zero-based line and character offset. A position is
 /// between two characters like an 'insert' cursor in a editor.
 public struct Position {
+	public init(line: Int, character: Int) {
+		self.line = line
+		self.character = character
+	}
+
     /// Line position in a document (zero-based).
     public var line: Int
 
@@ -19,6 +24,11 @@ public struct Position {
 /// A range in a text document expressed as (zero-based) start and end positions. A range is
 /// comparable to a selection in an editor. Therefore the end position is exclusive.
 public struct Range {
+	public init(start: Position, end: Position) {
+		self.start = start
+		self.end = end
+	}
+
     /// The range's start position.
     public var start: Position
 
@@ -28,6 +38,11 @@ public struct Range {
 
 /// Represents a location inside a resource, such as a line inside a text file.
 public struct Location {
+	public init(uri: DocumentUir, range: Range) {
+		self.uri = uri
+		self.range = range
+	}
+
     /// The URI of the document the location belongs to.
 	public var uri: DocumentUri
 
@@ -41,6 +56,11 @@ public struct Location {
 /// the initial document version. Execution wise text edits should applied from the bottom to the
 /// top of the text document. Overlapping text edits are not supported.
 public struct TextEdit {
+	public init(range: Range, newText: String) {
+		self.range = range
+		self.newText = newText
+	}
+
 	/// The range of the text document to be manipulated. To insert text into a document create
     /// a range where `start === end`.
 	public var range: Range
@@ -53,6 +73,11 @@ public struct TextEdit {
 /// `VersionedTextDocumentIdentifier` to allow clients to check the text document version before an
 /// edit is applied.
 public struct TextDocumentEdit {
+	public init(textDocument: VersionedTextDocumentIdentifier, edits: [TextEdit]) {
+		self.textDocument = textDocument
+		self.edits = edits
+	}
+
 	/// The text document to change.
 	public var textDocument: VersionedTextDocumentIdentifier
 
@@ -69,7 +94,7 @@ public enum WorkspaceEdit {
 
 	/// An array of `TextDocumentEdit`s to express changes to specific a specific version of a text
 	/// document. Whether a client supports versioned document edits is expressed via
-	/// `WorkspaceClientCapabilites.versionedWorkspaceEdit`.
+	/// `WorkspaceClientCapabilities.versionedWorkspaceEdit`.
 	case documentChanges([TextDocumentEdit])
 }
 
@@ -86,6 +111,13 @@ public class TextDocumentIdentifier {
 
 /// An item to transfer a text document from the client to the server.
 public struct TextDocumentItem {
+	public init(uri: DocumentUri, languageId: String, version: Int, text: String) {
+		self.uri = uri
+		self.languageId = languageId
+		self.version = version
+		self.text = text
+	}
+
 	/// The text document's URI.
 	public var uri: DocumentUri
 
@@ -114,6 +146,11 @@ public final class VersionedTextDocumentIdentifier: TextDocumentIdentifier {
 /// A parameter literal used in requests to pass a text document and a position inside that
 /// document.
 public struct TextDocumentPositionParams {
+	public init(textDocument: TextDocumentIdentifier, position: Position) {
+		self.textDocument = textDocument
+		self.position = position
+	}
+
 	/// The text document.
 	public var textDocument: TextDocumentIdentifier
 
@@ -128,6 +165,12 @@ public struct TextDocumentPositionParams {
 /// { language: 'typescript', scheme: 'file' }
 /// { language: 'json', pattern: '**/package.json' }
 public struct DocumentFilter {
+	public init(language: String? = nil, scheme: String? = nil, pattern: String? = nil) {
+		self.language = language
+		self.scheme = scheme
+		self.pattern = pattern
+	}
+	
 	/// A language id, like `typescript`.
 	public var language: String?
 

@@ -8,6 +8,14 @@ import JSONLib
 /// Represents a diagnostic, such as a compiler error or warning. Diagnostic objects are only
 /// valid in the scope of a resource.
 public struct Diagnostic {
+	public init(range: Range, message: String, severity: DiagnosticSeverity? = nil, code: DiagnosticCode? = nil, source: String? = nil) {
+		self.range = range
+		self.message = message
+		self.severity = severity
+		self.code = code
+		self.source = source
+	}
+
 	/// The range at which the message applies.
 	public var range: Range
 
