@@ -12,6 +12,8 @@ import JSONLib
 /// still required that the client provides text document synchronization (e.g. open, changed and
 /// close notifications).
 public struct ClientCapabilities {
+	public init() {}
+
 	/// Workspace specific client capabilities.
 	public var workspace: WorkspaceClientCapabilities? = nil
 
@@ -24,92 +26,100 @@ public struct ClientCapabilities {
 
 /// `TextDocumentClientCapabilities` define capabilities the editor/tool provides on text documents.
 public struct TextDocumentClientCapabilities {
+	public init() {}
     // TODO(owensd): fill this in
 }
 
-/// `WorkspaceClientCapabilites` define capabilities the editor/tool provides on the workspace:
+/// `WorkspaceClientCapabilities` define capabilities the editor/tool provides on the workspace:
 public struct WorkspaceClientCapabilities {
+	public init() {}
     // TODO(owensd): fill this in
 }
 
 public struct ServerCapabilities {
+	public init() {}
+
 	/// Defines how text documents are synced. Is either a detailed structure defining each
 	/// notification or for backwards compatibility the `TextDocumentSyncKind` number.
-	public var textDocumentSync: TextDocumentSyncOptions?
+	public var textDocumentSync: TextDocumentSyncOptions? = nil
 
     /// The server provides hover support.
-    public var hoverProvider: Bool?
+    public var hoverProvider: Bool? = nil
 
     /// The server provides completion support.
-    public var completionProvider: CompletionOptions?
+    public var completionProvider: CompletionOptions? = nil
 
     /// The server provides signature help support.
-    public var signatureHelpProvider: SignatureHelpOptions?
+    public var signatureHelpProvider: SignatureHelpOptions? = nil
 
     /// The server provides goto definition support.
-    public var definitionProvider: Bool?
+    public var definitionProvider: Bool? = nil
 
     /// The server provides find references support.
-    public var referencesProvider: Bool?
+    public var referencesProvider: Bool? = nil
 
     /// The server provides document highlight support.
-    public var documentHighlightProvider: Bool?
+    public var documentHighlightProvider: Bool? = nil
 
     /// The server provides document symbol support.
-    public var documentSymbolProvider: Bool?
+    public var documentSymbolProvider: Bool? = nil
 
     /// The server provides workspace symbol support.
-    public var workspaceSymbolProvider: Bool?
+    public var workspaceSymbolProvider: Bool? = nil
 
     /// The server provides code actions.
-    public var codeActionProvider: Bool?
+    public var codeActionProvider: Bool? = nil
 
     /// The server provides code lens.
-    public var codeLensProvider: CodeLensOptions?
+    public var codeLensProvider: CodeLensOptions? = nil
 
     /// The server provides document formatting.
-    public var documentFormattingProvider: Bool?
+    public var documentFormattingProvider: Bool? = nil
 
     /// The server provides document range formatting.
-    public var documentRangeFormattingProvider: Bool?
+    public var documentRangeFormattingProvider: Bool? = nil
 
     /// The server provides document formatting on typing.
-    public var documentOnTypeFormattingProvider: DocumentOnTypeFormattingOptions?
+    public var documentOnTypeFormattingProvider: DocumentOnTypeFormattingOptions? = nil
 
     /// The server provides rename support.
-    public var renameProvider: Bool?
+    public var renameProvider: Bool? = nil
 
     /// The server provides document link support.
-    public var documentLinkProvider: DocumentLinkOptions?
+    public var documentLinkProvider: DocumentLinkOptions? = nil
 
     /// The server provides execute command support.
-    public var executeCommandProvider: ExecuteCommandOptions?
+    public var executeCommandProvider: ExecuteCommandOptions? = nil
 
     /// Experimental server capabilities.
-    public var experimental: Any?
+    public var experimental: Any? = nil
 }
 
 public struct TextDocumentSyncOptions {
-	/// Open and close notifications are sent to the server.
-	public var openClose: Bool?
+	public init() {}
 
-	/// Change notificatins are sent to the server.
-	public var change: TextDocumentSyncKind?
+	/// Open and close notifications are sent to the server.
+	public var openClose: Bool? = nil
+
+	/// Change notifications are sent to the server.
+	public var change: TextDocumentSyncKind? = nil
 
 	/// Will save notifications are sent to the server.
-	public var willSave: Bool?
+	public var willSave: Bool? = nil
 
 	/// Will save wait until requests are sent to the server.
-	public var willSaveWaitUntil: Bool?
+	public var willSaveWaitUntil: Bool? = nil
 
 	/// Save notifications are sent to the server.
-	public var save: SaveOptions?
+	public var save: SaveOptions? = nil
 }
 
 /// Save options.
 public struct SaveOptions {
+	public init() {}
+
 	/// The client is supposed to include the content on save.
-	public var includeText: Bool?
+	public var includeText: Bool? = nil
 }
 
 /// Defines how the host (editor) should sync document changes to the language server.
@@ -127,32 +137,46 @@ public enum TextDocumentSyncKind: Int {
 
 /// The options to dictate how completion triggers should work.
 public struct CompletionOptions {
+	public init() {}
+
 	/// The server provides support to resolve additional information for a completion item.
-	public var resolveProvider: Bool?
+	public var resolveProvider: Bool? = nil
 
 	/// The characters that trigger completion automatically.
-	public var triggerCharacters: [String]?
+	public var triggerCharacters: [String]? = nil
 }
 
 public struct CodeLensOptions {
-	public var resolveProvider: Bool?
+	public init() {}
+
+	public var resolveProvider: Bool? = nil
 }
 
 public struct SignatureHelpOptions {
-	public var triggerCharacters: [String]?
+	public init() {}
+
+	public var triggerCharacters: [String]? = nil
 }
 
 public struct DocumentOnTypeFormattingOptions {
+	public init(trigger: String) {
+		self.firstTriggerCharacter = trigger
+	}
+
 	public var firstTriggerCharacter: String
-	public var moreTriggerCharacter: [String]?
+	public var moreTriggerCharacter: [String]? = nil
 }
 
 public struct DocumentLinkOptions {
-	public var resolveProvider: Bool?
+	public init() {}
+
+	public var resolveProvider: Bool? = nil
 }
 
 public struct ExecuteCommandOptions {
-	public var commands: [String]?
+	public init() {}
+
+	public var commands: [String]? = nil
 }
 
 
