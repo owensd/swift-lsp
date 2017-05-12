@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        ".build": true,
+        "Package.pins": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/bower_components": true,
+        ".build": true,
+        "Package.pins": true
+    },
+    "editor.quickSuggestions": false,
+    "cSpell.enabled": true
+}

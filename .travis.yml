@@ -1,0 +1,23 @@
+matrix:
+    include:
+        - os: linux
+          dist: trusty
+          sudo: required
+          language: cpp
+        - os: osx
+          osx_image: xcode8.3
+          language: objective-c
+          sudo: required
+
+script:
+    - swift build
+    - swift test
+
+before_install:
+    - chmod ugo+x ./Scripts/InstallSwift.sh
+    - . ./Scripts/InstallSwift.sh
+
+notifications:
+    email:
+        on_success: never
+        on_failure: change
