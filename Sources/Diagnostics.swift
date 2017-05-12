@@ -74,3 +74,16 @@ extension TraceSetting: Decodable {
 		}
 	}
 }
+
+public struct PublishDiagnosticsParams {
+	public init(uri: DocumentUri, diagnostics: [Diagnostic]) {
+		self.uri = uri
+		self.diagnostics = diagnostics
+	}
+	
+	/// The URI for which diagnostic information is reported.
+	public var uri: DocumentUri
+
+	/// An array of diagnostic information items.
+	public var diagnostics: [Diagnostic]
+}

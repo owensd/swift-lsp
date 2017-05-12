@@ -96,7 +96,7 @@ public final class JsonRpcProtocol: MessageProtocol {
     }
 
     private func general(initialized json: JSValue) throws -> LanguageServerCommand {
-        throw "nyi"
+        return .initialized(requestId: try RequestId.from(json: json["id"]))
     }
 
     private func general(shutdown json: JSValue) throws -> LanguageServerCommand {
@@ -104,11 +104,13 @@ public final class JsonRpcProtocol: MessageProtocol {
     }
 
     private func general(exit json: JSValue) throws -> LanguageServerCommand {
-        return .exit
+        return .exit(requestId: try RequestId.from(json: json["id"]))
     }
 
     private func general(cancelRequest json: JSValue) throws -> LanguageServerCommand {
-        throw "nyi"
+        return .cancelRequest(
+            requestId: try RequestId.from(json: json["id"]),
+            params: try CancelParams.from(json: json["params"]))
     }
 
     private func window(showMessage json: JSValue) throws -> LanguageServerCommand {

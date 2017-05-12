@@ -20,7 +20,10 @@
         "Encodable",
         "Decodable",
         "Glibc",
-        "languageserverprotocol"
+        "languageserverprotocol",
+        "Unregistration",
+        "deregister",
+        "unregisterations"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.

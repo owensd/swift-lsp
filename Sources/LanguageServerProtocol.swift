@@ -99,15 +99,51 @@ public protocol MessageProtocol {
 }
 
 /// Defines the API to describe a command for the language server.
-/// These currently have a very tight 1:1 mapping with the commands as dictated in the JSONRPC spec.
-/// This is by-design to allow for easier development. However, this coupling does **NOT** preclude
-/// a different serialization strategy. The only thing it binds is the semantics of the API, which
-/// is deemed appropriate at this time. TODO(owensd): This layer should be technically free from any
-/// Language Server Protocol types... but that's a lot of duplication now for little benefit.
 public enum LanguageServerCommand {
     case initialize(requestId: RequestId?, params: InitializeParams)
+    case initialized(requestId: RequestId?)
     case shutdown(requestId: RequestId?)
-    case exit
+    case exit(requestId: RequestId?)
+    case cancelRequest(requestId: RequestId?, params: CancelParams)
+
+    case windowShowMessage(requestId: RequestId?, params: ShowMessageParams)
+    case windowShowMessageRequest(requestId: RequestId?, params: ShowMessageRequestParams)
+    case windowLogMessage(requestId: RequestId?, params: LogMessageParams)
+    case telemetryEvent(requestId: RequestId?, params: Any)
+
+    case clientRegisterCapability(requestId: RequestId?, params: RegistrationParams)
+    case clientUnregisterCapability(requestId: RequestId?, params: UnregistrationParams)
+
+    case workspaceDidChangeConfiguration(requestId: RequestId?, params: DidChangeConfigurationParams)
+    case workspaceDidChangeWatchedFiles(requestId: RequestId?, params: DidChangeWatchedFilesParams)
+    case workspaceSymbol(requestId: RequestId?, params: WorkspaceSymbolParams)
+    case workspaceExecuteCommand(requestId: RequestId?, params: ExecuteCommandParams)
+    case workspaceApplyEdit(requestId: RequestId?, params: ApplyWorkspaceEditParams)
+
+    case textDocumentPublishDiagnostics(requestId: RequestId?, params: PublishDiagnosticsParams)
+    case textDocumentDidOpen(requestId: RequestId?, params: DidOpenTextDocumentParams)
+    case textDocumentDidChange(requestId: RequestId?, params: DidChangeTextDocumentParams)
+    case textDocumentWillSave(requestId: RequestId?, params: WillSaveTextDocumentParams)
+    case textDocumentWillSaveWaitUntil(requestId: RequestId?, params: WillSaveTextDocumentParams)
+    case textDocumentDidSave(requestId: RequestId?, params: DidSaveTextDocumentParams)
+    case textDocumentDidClose(requestId: RequestId?, params: DidCloseTextDocumentParams)
+    case textDocumentCompletion(requestId: RequestId?, params: TextDocumentPositionParams)
+    case completionItemResolve(requestId: RequestId?, params: CompletionItem)
+    case textDocumentHover(requestId: RequestId?, params: TextDocumentPositionParams)
+    case textDocumentSignatureHelp(requestId: RequestId?, params: TextDocumentPositionParams)
+    case textDocumentReferences(requestId: RequestId?, params: ReferenceParams)
+    case textDocumentDocumentHighlight(requestId: RequestId?, params: TextDocumentPositionParams)
+    case textDocumentDocumentSymbol(requestId: RequestId?, params: DocumentSymbolParams)
+    case textDocumentFormatting(requestId: RequestId?, params: DocumentFormattingParams)
+    case textDocumentRangeFormatting(requestId: RequestId?, params: DocumentRangeFormattingParams)
+    case textDocumentOnTypeFormatting(requestId: RequestId?, params: DocumentOnTypeFormattingParams)
+    case textDocumentDefinition(requestId: RequestId?, params: TextDocumentPositionParams)
+    case textDocumentCodeAction(requestId: RequestId?, params: CodeActionParams)
+    case textDocumentCodeLens(requestId: RequestId?, params: CodeLensParams)
+    case codeLensResolve(requestId: RequestId?, params: CodeLens)
+    case textDocumentDocumentLink(requestId: RequestId?, params: DocumentLinkParams)
+    case documentLinkResolve(requestId: RequestId?, params: DocumentLink)
+    case textDocumentRename(requestId: RequestId?, params: RenameParams)
 }
 
 /// Helper to convert the message into a printable output.

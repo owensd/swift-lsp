@@ -181,5 +181,206 @@ public struct DocumentFilter {
 	public var pattern: String?
 }
 
+public struct DidOpenTextDocumentParams {
+	public init(textDocument: TextDocumentItem) {
+		self.textDocument = textDocument
+	}
+
+	/// The document that was opened.
+	public var textDocument: TextDocumentItem
+}
+
+public struct DidChangeTextDocumentParams {
+	public init(textDocument: VersionedTextDocumentIdentifier, contentChanges: [TextDocumentContentChangeEvent]) {
+		self.textDocument = textDocument
+		self.contentChanges = contentChanges
+	}
+
+	/// The document that did change. The version number points to the version after all provided content changes have been applied.
+	public var textDocument: VersionedTextDocumentIdentifier
+
+	/// The actual content changes.
+	public var contentChanges: [TextDocumentContentChangeEvent]
+}
+
+/// An event describing a change to a text document. If range and rangeLength are omitted the new
+/// text is considered to be the full content of the document.
+public struct TextDocumentContentChangeEvent {
+	public init(text: String, range: Range? = nil, rangeLength: Int? = nil) {
+		self.text = text
+		self.range = range
+		self.rangeLength = rangeLength
+	}
+
+	/// The range of the document that changed.
+	public var range: Range?
+
+	/// The length of the range that got replaced.
+	public var rangeLength: Int?
+
+	/// The new text of the range/document.
+	public var text: String
+}
+
+/// The parameters send in a will save text document notification.
+public struct WillSaveTextDocumentParams {
+	public init(textDocument: TextDocumentIdentifier, reason: TextDocumentSaveReason) {
+		self.textDocument = textDocument
+		self.reason = reason
+	}
+
+	/// The document that will be saved.
+	public var textDocument: TextDocumentIdentifier
+
+	/// The 'TextDocumentSaveReason'.
+	public var reason: TextDocumentSaveReason
+}
+
+/// Represents reasons why a text document is saved.
+public enum TextDocumentSaveReason: Int {
+	/// Manually triggered, e.g. by the user pressing save, by starting debugging, or by an API
+	/// call.
+	case manual = 1
+
+	/// Automatic after a delay.
+	case afterDelay = 2
+
+	/// When the editor lost focus.
+	case focusOut = 3
+}
+
+public struct DidSaveTextDocumentParams {
+	public init(textDocument: TextDocumentIdentifier, text: String? = nil) {
+		self.textDocument = textDocument
+		self.text = text
+	}
+
+	/// The document that was saved.
+	public var textDocument: TextDocumentIdentifier
+
+	/// Optional the content when saved. Depends on the includeText value when the save notification
+	/// was requested.
+	public var text: String?
+}
+
+public struct DidCloseTextDocumentParams {
+	public init(textDocument: TextDocumentIdentifier) {
+		self.textDocument = textDocument
+	}
+
+	/// The document that was closed.
+	public var textDocument: TextDocumentIdentifier
+}
+
+public struct DocumentSymbolParams {
+	public init(textDocument: TextDocumentIdentifier) {
+		self.textDocument = textDocument
+	}
+
+	/// The text document.
+	public var textDocument: TextDocumentIdentifier
+}
+
+public struct CodeActionParams {
+	public init(textDocument: TextDocumentIdentifier, range: Range, context: CodeActionContext) {
+		self.textDocument = textDocument
+		self.range = range
+		self.context = context
+	}
+
+	/// The document in which the command was invoked.
+	public var textDocument: TextDocumentIdentifier
+
+	/// The range for which the command was invoked.
+	public var range: Range
+
+	/// Context carrying additional information.
+	public var context: CodeActionContext
+}
+
+/// Contains additional diagnostic information about the context in which a code action is run.
+public struct CodeActionContext {
+	public init(diagnostics: [Diagnostic]) {
+		self.diagnostics = diagnostics
+	}
+
+	/// An array of diagnostics.
+	public var diagnostics: [Diagnostic]
+}
+
+public struct CodeLensParams {
+	public init(textDocument: TextDocumentIdentifier) {
+		self.textDocument = textDocument
+	}
+
+	/// The document to request code lens for.
+	public var textDocument: TextDocumentIdentifier
+}
+
+/// A code lens represents a command that should be shown along with source text, like the number of
+/// references, a way to run tests, etc.
+///
+/// A code lens is _unresolved_ when no command is associated to it. For performance reasons the
+/// creation of a code lens and resolving should be done in two stages.
+public struct CodeLens {
+	public init(range: Range, command: Command? = nil, data: Any? = nil) {
+		self.range = range
+		self.command = command
+		self.data = data
+	}
+
+	/// The range in which this code lens is valid. Should only span a single line.
+	public var range: Range
+
+	/// The command this code lens represents.
+	public var command: Command?
+
+	/// A data entry field that is preserved on a code lens item between
+	/// a code lens and a code lens resolve request.
+	public var data: Any?
+}
+
+public struct DocumentLinkParams {
+	public init(textDocument: TextDocumentIdentifier) {
+		self.textDocument = textDocument
+	}
+
+	/// The document to provide document links for.
+	public var textDocument: TextDocumentIdentifier
+}
+
+/// A document link is a range in a text document that links to an internal or external resource,
+/// like another text document or a web site.
+public struct DocumentLink {
+	public init(range: Range, target: DocumentUri? = nil) {
+		self.range = range
+		self.target = target
+	}
+
+	/// The range this link applies to.
+	public var range: Range
+	
+	/// The uri this link points to. If missing a resolve request is sent later.
+	public var target: DocumentUri?
+}
+
+public struct RenameParams {
+	public init(textDocument: TextDocumentIdentifier, position: Position, newName: String) {
+		self.textDocument = textDocument
+		self.position = position
+		self.newName = newName
+	}
+	
+	/// The document to format.
+	public var textDocument: TextDocumentIdentifier
+
+	/// The position at which this request was sent.
+	public var position: Position
+
+	/// The new name of the symbol. If the given name is not valid the request must return a
+	/// [ResponseError](#ResponseError) with an appropriate message set.
+	public var newName: String
+}
+
 /// A document selector is the combination of one or many document filters.
 public typealias DocumentSelector = [DocumentFilter];
