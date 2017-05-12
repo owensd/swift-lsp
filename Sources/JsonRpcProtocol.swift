@@ -89,6 +89,21 @@ public final class JsonRpcProtocol: MessageProtocol {
         }
     }
 
+    /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
+    /// error information about why the transformation could not be done.
+    public func translate(response: ResponseMessage) throws -> MessageData {
+        let json = response.toJson().stringify(nil)                        
+        let contentLength = json.characters.count
+        let header = "Content-Length: \(contentLength)\r\nContent-Type: application/vscode-jsonrpc; charset=utf8\r\n\r\n"
+        let message = "\(header)\(json)"
+
+        guard let data = message.data(using: .utf8) else {
+            throw "unable to convert the response to data"
+        }
+
+        return [UInt8](data)
+    }
+
     private func general(initialize json: JSValue) throws -> LanguageServerCommand {
         return .initialize(
             requestId: try RequestId.from(json: json["id"]),

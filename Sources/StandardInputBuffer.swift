@@ -10,6 +10,7 @@
     import os.log
 #endif
 
+import Foundation
 import Dispatch
 
 @available(macOS 10.12, *)
@@ -27,7 +28,7 @@ public final class StandardInputBuffer: InputBuffer {
     public init() {}
 
     /// Continuously monitors the `stdin`.
-    public func run(received: @escaping (Message) -> ()) {
+    public func run(received: @escaping (Message) -> MessageData?) {
         inputQueue.async {
             let messageBuffer = MessageBuffer()
             var input = fd_set()
@@ -54,7 +55,18 @@ public final class StandardInputBuffer: InputBuffer {
                     else if bytesRead > 0 {
                         let messages = messageBuffer.write(data: [UInt8](buffer[0..<bytesRead]))
                         for message in messages {
-                            received(message)
+                            if let response = received(message) {
+                                let data = Data(bytes: response)
+                                if #available(macOS 10.12, *) {
+                                    if let encoded = String(data: data, encoding: .utf8) {
+                                        os_log("response sent:\n%{public}@", log: log, type: .default, encoded)
+                                    }
+                                    else {
+                                        os_log("response sent: <cannot decode>", log: log, type: .default)
+                                    }
+                                }
+                                FileHandle.standardOutput.write(data)
+                            }
                         }
                     }
                 }

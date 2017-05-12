@@ -72,7 +72,7 @@ public protocol InputBuffer {
     /// closure is invoked.
     /// Implementation note: this function is intended to spawn a new thread for handling incoming
     /// message data. As such, this is a non-blocking function call.
-    func run(received: @escaping (Message) -> ())
+    func run(received: @escaping (Message) -> MessageData?)
 
     /// Used to signal that the message source should stop processing input feeds.
     func stop()
@@ -96,6 +96,10 @@ public protocol MessageProtocol {
     /// can throw, providing detailed error information about why the transformation could not be
     /// done.
     func translate(message: Message) throws -> LanguageServerCommand
+
+    /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
+    /// error information about why the transformation could not be done.
+    func translate(response: ResponseMessage) throws -> MessageData
 }
 
 /// Defines the API to describe a command for the language server.
