@@ -7,7 +7,14 @@ import JSONLib
 
 /// The set of parameters that are used for the `initialize` method.
 public struct InitializeParams {
-    public init() {}
+    public init(processId: Int? = nil, rootPath: String? = nil, rootUri: DocumentUri? = nil, initializationOptions: Decodable? = nil, capabilities: ClientCapabilities = ClientCapabilities(), trace: TraceSetting? = nil) {
+        self.processId = processId
+        self.rootPath = rootPath
+        self.rootUri = rootUri
+        self.initializationOptions = initializationOptions
+        self.capabilities = capabilities
+        self.trace = trace
+    }
 
 	/// The process Id of the parent process that started the server. Is `null` if the process
     /// has not been started by another process.

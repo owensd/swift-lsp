@@ -38,7 +38,7 @@ public struct Range {
 
 /// Represents a location inside a resource, such as a line inside a text file.
 public struct Location {
-	public init(uri: DocumentUir, range: Range) {
+	public init(uri: DocumentUri, range: Range) {
 		self.uri = uri
 		self.range = range
 	}
@@ -170,7 +170,7 @@ public struct DocumentFilter {
 		self.scheme = scheme
 		self.pattern = pattern
 	}
-	
+
 	/// A language id, like `typescript`.
 	public var language: String?
 
