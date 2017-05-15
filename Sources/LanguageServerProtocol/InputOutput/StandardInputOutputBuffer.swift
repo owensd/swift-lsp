@@ -14,10 +14,10 @@ import Foundation
 import Dispatch
 
 @available(macOS 10.12, *)
-fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "StandardInputBuffer")
+fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "StandardInputOutputBuffer")
 
 /// A message source that pulls data in from `stdin`.
-public final class StandardInputBuffer: InputBuffer {
+public final class StandardInputOutputBuffer: InputOutputBuffer {
     /// Internal queue used to handle the message input source.
     private var inputQueue = DispatchQueue(
         label: "com.kiadstudios.swiftlangsrv.standardinputbuffer",

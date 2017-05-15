@@ -3,8 +3,6 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
-import JSONLib
-
 /// Client capabilities got introduced with the version 3.0 of the protocol. They therefore only
 /// describe capabilities that got introduced in 3.x or later. Capabilities that existed in the 2.x
 /// version of the protocol are still mandatory for clients. Clients cannot opt out of providing
@@ -178,54 +176,3 @@ public struct ExecuteCommandOptions {
 
 	public var commands: [String]? = nil
 }
-
-
-// MARK: Serialization
-
-extension ClientCapabilities: Decodable {
-	public static func from(json: JSValue) throws -> ClientCapabilities {
-		// TODO(owensd): nyi
-		return ClientCapabilities()
-	}
-}
-
-extension ServerCapabilities: Encodable {}
-extension TextDocumentSyncOptions: Encodable {}
-
-extension TextDocumentSyncKind: Encodable {
-	public func toJson() -> JSValue {
-		return JSValue(Double(self.rawValue))
-	}
-}
-
-extension CompletionOptions: Encodable {
-	public func toJson() -> JSValue {
-		var json: JSValue = [:]
-		if let provider = self.resolveProvider {
-			json["resolveProvider"] = JSValue(provider)
-		}
-
-		if let triggers = self.triggerCharacters {
-			json["triggerCharacters"] = JSValue(triggers.joined(separator: ", "))
-		}
-
-		return json
-	}
-}
-
-extension CodeLensOptions: Encodable {}
-
-extension SignatureHelpOptions: Encodable {
-	public func toJson() -> JSValue {
-		var json: JSValue = [:]
-		if let triggers = self.triggerCharacters {
-			json["triggerCharacters"] = JSValue(triggers.joined(separator: ", "))
-		}
-
-		return json
-	}
-}
-
-extension DocumentOnTypeFormattingOptions: Encodable {}
-extension DocumentLinkOptions: Encodable {}
-extension ExecuteCommandOptions: Encodable {}

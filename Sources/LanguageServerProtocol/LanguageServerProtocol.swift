@@ -67,9 +67,10 @@ public struct MessageHeader {
 }
 
 /// The bottom layer in the messaging stack that is the source of the raw message data.
-public protocol InputBuffer {
+public protocol InputOutputBuffer {
     /// Starts listening for new messages to come in. Whenever a message comes in, the `received`
-    /// closure is invoked.
+    /// closure is invoked. It is also the responsibility of this function to write out the response
+    /// message.
     /// Implementation note: this function is intended to spawn a new thread for handling incoming
     /// message data. As such, this is a non-blocking function call.
     func run(received: @escaping (Message) -> MessageData?)
@@ -102,35 +103,44 @@ public protocol MessageProtocol {
     func translate(response: ResponseMessage) throws -> MessageData
 }
 
+import JSONLib
+public protocol Encodable {
+    func toJson() -> JSValue
+}
+
+public protocol Decodable {
+    static func from(json: JSValue) throws -> Self
+}
+
 /// Defines the API to describe a command for the language server.
 public enum LanguageServerCommand {
     case initialize(requestId: RequestId?, params: InitializeParams)
-    case initialized(requestId: RequestId?)
+    case initialized
     case shutdown(requestId: RequestId?)
-    case exit(requestId: RequestId?)
-    case cancelRequest(requestId: RequestId?, params: CancelParams)
+    case exit
+    case cancelRequest(params: CancelParams)
 
-    case windowShowMessage(requestId: RequestId?, params: ShowMessageParams)
+    case windowShowMessage(params: ShowMessageParams)
     case windowShowMessageRequest(requestId: RequestId?, params: ShowMessageRequestParams)
-    case windowLogMessage(requestId: RequestId?, params: LogMessageParams)
-    case telemetryEvent(requestId: RequestId?, params: Any)
+    case windowLogMessage(params: LogMessageParams)
+    case telemetryEvent(params: Any)
 
     case clientRegisterCapability(requestId: RequestId?, params: RegistrationParams)
     case clientUnregisterCapability(requestId: RequestId?, params: UnregistrationParams)
 
-    case workspaceDidChangeConfiguration(requestId: RequestId?, params: DidChangeConfigurationParams)
-    case workspaceDidChangeWatchedFiles(requestId: RequestId?, params: DidChangeWatchedFilesParams)
+    case workspaceDidChangeConfiguration(params: DidChangeConfigurationParams)
+    case workspaceDidChangeWatchedFiles(params: DidChangeWatchedFilesParams)
     case workspaceSymbol(requestId: RequestId?, params: WorkspaceSymbolParams)
     case workspaceExecuteCommand(requestId: RequestId?, params: ExecuteCommandParams)
     case workspaceApplyEdit(requestId: RequestId?, params: ApplyWorkspaceEditParams)
 
-    case textDocumentPublishDiagnostics(requestId: RequestId?, params: PublishDiagnosticsParams)
-    case textDocumentDidOpen(requestId: RequestId?, params: DidOpenTextDocumentParams)
-    case textDocumentDidChange(requestId: RequestId?, params: DidChangeTextDocumentParams)
-    case textDocumentWillSave(requestId: RequestId?, params: WillSaveTextDocumentParams)
+    case textDocumentPublishDiagnostics(params: PublishDiagnosticsParams)
+    case textDocumentDidOpen(params: DidOpenTextDocumentParams)
+    case textDocumentDidChange(params: DidChangeTextDocumentParams)
+    case textDocumentWillSave(params: WillSaveTextDocumentParams)
     case textDocumentWillSaveWaitUntil(requestId: RequestId?, params: WillSaveTextDocumentParams)
-    case textDocumentDidSave(requestId: RequestId?, params: DidSaveTextDocumentParams)
-    case textDocumentDidClose(requestId: RequestId?, params: DidCloseTextDocumentParams)
+    case textDocumentDidSave(params: DidSaveTextDocumentParams)
+    case textDocumentDidClose(params: DidCloseTextDocumentParams)
     case textDocumentCompletion(requestId: RequestId?, params: TextDocumentPositionParams)
     case completionItemResolve(requestId: RequestId?, params: CompletionItem)
     case textDocumentHover(requestId: RequestId?, params: TextDocumentPositionParams)

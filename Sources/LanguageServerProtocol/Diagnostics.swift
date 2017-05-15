@@ -3,8 +3,6 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
-import JSONLib
-
 /// Represents a diagnostic, such as a compiler error or warning. Diagnostic objects are only
 /// valid in the scope of a resource.
 public struct Diagnostic {
@@ -56,23 +54,6 @@ public enum TraceSetting {
     case off
     case messages
     case verbose
-}
-
-// MARK: Serialization
-
-extension TraceSetting: Decodable {
-	public static func from(json: JSValue) throws -> TraceSetting {
-		if !json.hasValue { return .off }
-		guard let value = json.string else {
-			throw "The trace setting must be a string or not present."
-		}
-		switch value {
-		case "off": return .off
-		case "messages": return .messages
-		case "verbose": return .verbose
-		default: throw "'\(value)' is an unsupported value"
-		}
-	}
 }
 
 public struct PublishDiagnosticsParams {

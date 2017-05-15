@@ -3,8 +3,6 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
-import JSONLib
-
 /// The set of parameters that are used for the `initialize` method.
 public struct InitializeParams {
     public init(processId: Int? = nil, rootPath: String? = nil, rootUri: DocumentUri? = nil, initializationOptions: Decodable? = nil, capabilities: ClientCapabilities = ClientCapabilities(), trace: TraceSetting? = nil) {
@@ -49,31 +47,3 @@ public struct InitializeResult {
     /// This should return all of the capabilities that the server supports.
     public var capabilities: ServerCapabilities
 }
-
-
-// MARK: Serialization
-
-extension InitializeParams {
-    public static func from(json: JSValue) throws -> InitializeParams {
-        guard let _ = json.object else { throw "The `params` value must be a dictionary." }
-        let processId = json["processId"].integer ?? nil
-        let rootPath = json["rootPath"].string ?? nil
-        let rootUri = json["rootUri"].string ?? nil
-        // TODO(owensd): Support user options...
-        //let initializationOptions = try type(of: initializationOptions).from(json: json["intializationOptions"])
-        let initializationOptions: Decodable? = nil
-        let capabilities = try ClientCapabilities.from(json: json["capabilities"])
-        let trace = try TraceSetting.from(json: json["trace"])
-
-        return InitializeParams(
-            processId: processId,
-            rootPath: rootPath,
-            rootUri: rootUri,
-            initializationOptions: initializationOptions,
-            capabilities: capabilities,
-            trace: trace
-        )
-    }
-}
-
-extension InitializeResult: Encodable {}
