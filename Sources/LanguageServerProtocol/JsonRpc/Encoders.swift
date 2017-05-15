@@ -13,13 +13,13 @@ import os.log
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Encodable")
 
 public extension Encodable {
-	func toJson() -> JSValue {
+	func encode() -> JSValue {
 		var json: JSValue = [:]
 		let mirror = Mirror(reflecting: self)
 		for (label, value) in mirror.children {
             if let name = label {
                 if let value = value as? Encodable {
-    				json[name] = value.toJson()
+    				json[name] = value.encode()
                 }
                 else {
                     // To check if the `Encodable` is actually an `Optional<Encodable>` we need to
@@ -28,7 +28,7 @@ public extension Encodable {
                     if valueMirror.displayStyle == .optional {
                         if let (_, some) = valueMirror.children.first {
                             if let some = some as? Encodable {
-                                json[name] = some.toJson()
+                                json[name] = some.encode()
                             }
                             else {
                                 if #available(macOS 10.12, *) {
@@ -58,31 +58,31 @@ public extension Encodable {
 }
 
 extension String: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         return JSValue(self)
     }
 }
 
 extension Double: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         return JSValue(self)
     }
 }
 
 extension Bool: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         return JSValue(self)
     }
 }
 
 extension Int: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         return JSValue(Double(self))
     }
 }
 
 extension Array where Iterator.Element == String {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         let content = self.joined(separator: ",")
         return JSValue("[\(content)]")
     }
@@ -95,13 +95,13 @@ extension ServerCapabilities: Encodable {}
 extension TextDocumentSyncOptions: Encodable {}
 
 extension TextDocumentSyncKind: Encodable {
-	public func toJson() -> JSValue {
+	public func encode() -> JSValue {
 		return JSValue(Double(self.rawValue))
 	}
 }
 
 extension CompletionOptions: Encodable {
-	public func toJson() -> JSValue {
+	public func encode() -> JSValue {
 		var json: JSValue = [:]
 		if let provider = self.resolveProvider {
 			json["resolveProvider"] = JSValue(provider)
@@ -118,7 +118,7 @@ extension CompletionOptions: Encodable {
 extension CodeLensOptions: Encodable {}
 
 extension SignatureHelpOptions: Encodable {
-	public func toJson() -> JSValue {
+	public func encode() -> JSValue {
 		var json: JSValue = [:]
 		if let triggers = self.triggerCharacters {
 			json["triggerCharacters"] = JSValue(triggers.joined(separator: ", "))
@@ -135,11 +135,11 @@ extension ExecuteCommandOptions: Encodable {}
 
 extension ResponseMessage: Encodable {}
 extension ResponseResult: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         switch self {
         case let .result(encodable):
             if let encodable = encodable {
-                return encodable.toJson()
+                return encodable.encode()
             }
             return nil
         case let .error(code, message, data):
@@ -147,7 +147,7 @@ extension ResponseResult: Encodable {
             json["code"] = JSValue(Double(code))
             json["message"] = JSValue(message)
             if let data = data {
-                json["data"] = data.toJson()
+                json["data"] = data.encode()
             }
             return json
         }
@@ -155,7 +155,7 @@ extension ResponseResult: Encodable {
 }
 
 extension RequestId: Encodable {
-    public func toJson() -> JSValue {
+    public func encode() -> JSValue {
         switch self {
         case let .number(value): return JSValue(Double(value))
         case let .string(value): return JSValue(value)

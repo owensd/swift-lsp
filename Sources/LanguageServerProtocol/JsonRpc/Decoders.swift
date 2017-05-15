@@ -13,16 +13,16 @@ import JSONLib
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Serialization")
 
 extension InitializeParams {
-    public static func from(json: JSValue) throws -> InitializeParams {
-        guard let _ = json.object else { throw "The `params` value must be a dictionary." }
-        let processId = json["processId"].integer ?? nil
-        let rootPath = json["rootPath"].string ?? nil
-        let rootUri = json["rootUri"].string ?? nil
+    public static func decode(_ data: JSValue) throws -> InitializeParams {
+        guard let _ = data.object else { throw "The `params` value must be a dictionary." }
+        let processId = data["processId"].integer ?? nil
+        let rootPath = data["rootPath"].string ?? nil
+        let rootUri = data["rootUri"].string ?? nil
         // TODO(owensd): Support user options...
-        //let initializationOptions = try type(of: initializationOptions).from(json: json["intializationOptions"])
+        //let initializationOptions = try type(of: initializationOptions).decode(json["initializationOptions"])
         let initializationOptions: Decodable? = nil
-        let capabilities = try ClientCapabilities.from(json: json["capabilities"])
-        let trace = try TraceSetting.from(json: json["trace"])
+        let capabilities = try ClientCapabilities.decode(data["capabilities"])
+        let trace = try TraceSetting.decode(data["trace"])
 
         return InitializeParams(
             processId: processId,
@@ -36,9 +36,9 @@ extension InitializeParams {
 }
 
 extension TraceSetting: Decodable {
-	public static func from(json: JSValue) throws -> TraceSetting {
-		if !json.hasValue { return .off }
-		guard let value = json.string else {
+	public static func decode(_ data: JSValue) throws -> TraceSetting {
+		if !data.hasValue { return .off }
+		guard let value = data.string else {
 			throw "The trace setting must be a string or not present."
 		}
 		switch value {
@@ -51,11 +51,11 @@ extension TraceSetting: Decodable {
 }
 
 extension RequestId: Decodable {
-    public static func from(json: JSValue) throws -> RequestId {
-        if let value = json.string {
+    public static func decode(_ data: JSValue) throws -> RequestId {
+        if let value = data.string {
             return .string(value)
         }
-        if let value = json.number {
+        if let value = data.number {
             return .number(Int(value))
         }
 
@@ -64,18 +64,18 @@ extension RequestId: Decodable {
 }
 
 extension RequestMessage: Decodable {
-    public static func from(json: JSValue) throws -> RequestMessage {
-        let requestId = try RequestId.from(json: json["requestId"])
-        guard let jsonrpc = json["jsonrpc"].string else {
+    public static func decode(_ data: JSValue) throws -> RequestMessage {
+        let requestId = try RequestId.decode(data["requestId"])
+        guard let jsonrpc = data["jsonrpc"].string else {
             throw "A request requires a `jsonrpc` member."
         }
         if jsonrpc != "2.0" {
             throw "The only valid value for `jsonrpc` is `2.0`."
         }
-        guard let method = json["method"].string else {
+        guard let method = data["method"].string else {
             throw "A request requires a `method` member."
         }
-        let params = try ParamsType.from(json: json["params"])
+        let params = try ParamsType.decode(data["params"])
 
         return RequestMessage(id: requestId, method: method, params: params)
     }
@@ -83,169 +83,169 @@ extension RequestMessage: Decodable {
 
 
 extension CancelParams: Decodable {
-    public static func from(json: JSValue) throws -> CancelParams {
-        return CancelParams(id: try RequestId.from(json: json["id"]))
+    public static func decode(_ data: JSValue) throws -> CancelParams {
+        return CancelParams(id: try RequestId.decode(data["id"]))
     }
 }
 
 extension ClientCapabilities: Decodable {
-	public static func from(json: JSValue) throws -> ClientCapabilities {
+	public static func decode(_ data: JSValue) throws -> ClientCapabilities {
 		// TODO(owensd): nyi
 		return ClientCapabilities()
 	}
 }
 
 extension ShowMessageParams: Decodable {
-    public static func from(json: JSValue) throws -> ShowMessageParams {
+    public static func decode(_ data: JSValue) throws -> ShowMessageParams {
         throw "nyi"
     }
 }
 
 extension ShowMessageRequestParams: Decodable {
-    public static func from(json: JSValue) throws -> ShowMessageRequestParams {
+    public static func decode(_ data: JSValue) throws -> ShowMessageRequestParams {
         throw "nyi"
     }
 }
 
 extension LogMessageParams: Decodable {
-    public static func from(json: JSValue) throws -> LogMessageParams {
+    public static func decode(_ data: JSValue) throws -> LogMessageParams {
         throw "nyi"
     }
 }
 extension RegistrationParams: Decodable {
-    public static func from(json: JSValue) throws -> RegistrationParams {
+    public static func decode(_ data: JSValue) throws -> RegistrationParams {
         throw "nyi"
     }
 }
 extension UnregistrationParams: Decodable {
-    public static func from(json: JSValue) throws -> UnregistrationParams {
+    public static func decode(_ data: JSValue) throws -> UnregistrationParams {
         throw "nyi"
     }
 }
 extension DidChangeConfigurationParams: Decodable {
-    public static func from(json: JSValue) throws -> DidChangeConfigurationParams {
+    public static func decode(_ data: JSValue) throws -> DidChangeConfigurationParams {
         throw "nyi"
     }
 }
 extension DidChangeWatchedFilesParams: Decodable {
-    public static func from(json: JSValue) throws -> DidChangeWatchedFilesParams {
+    public static func decode(_ data: JSValue) throws -> DidChangeWatchedFilesParams {
         throw "nyi"
     }
 }
 extension WorkspaceSymbolParams: Decodable {
-    public static func from(json: JSValue) throws -> WorkspaceSymbolParams {
+    public static func decode(_ data: JSValue) throws -> WorkspaceSymbolParams {
         throw "nyi"
     }
 }
 extension ExecuteCommandParams: Decodable {
-    public static func from(json: JSValue) throws -> ExecuteCommandParams {
+    public static func decode(_ data: JSValue) throws -> ExecuteCommandParams {
         throw "nyi"
     }
 }
 extension ApplyWorkspaceEditParams: Decodable {
-    public static func from(json: JSValue) throws -> ApplyWorkspaceEditParams {
+    public static func decode(_ data: JSValue) throws -> ApplyWorkspaceEditParams {
         throw "nyi"
     }
 }
 extension PublishDiagnosticsParams: Decodable {
-    public static func from(json: JSValue) throws -> PublishDiagnosticsParams {
+    public static func decode(_ data: JSValue) throws -> PublishDiagnosticsParams {
         throw "nyi"
     }
 }
 extension DidOpenTextDocumentParams: Decodable {
-    public static func from(json: JSValue) throws -> DidOpenTextDocumentParams {
+    public static func decode(_ data: JSValue) throws -> DidOpenTextDocumentParams {
         throw "nyi"
     }
 }
 extension DidChangeTextDocumentParams: Decodable {
-    public static func from(json: JSValue) throws -> DidChangeTextDocumentParams {
+    public static func decode(_ data: JSValue) throws -> DidChangeTextDocumentParams {
         throw "nyi"
     }
 }
 extension WillSaveTextDocumentParams: Decodable {
-    public static func from(json: JSValue) throws -> WillSaveTextDocumentParams {
+    public static func decode(_ data: JSValue) throws -> WillSaveTextDocumentParams {
         throw "nyi"
     }
 }
 extension DidSaveTextDocumentParams: Decodable {
-    public static func from(json: JSValue) throws -> DidSaveTextDocumentParams {
+    public static func decode(_ data: JSValue) throws -> DidSaveTextDocumentParams {
         throw "nyi"
     }
 }
 extension DidCloseTextDocumentParams: Decodable {
-    public static func from(json: JSValue) throws -> DidCloseTextDocumentParams {
+    public static func decode(_ data: JSValue) throws -> DidCloseTextDocumentParams {
         throw "nyi"
     }
 }
 extension CompletionItem: Decodable {
-    public static func from(json: JSValue) throws -> CompletionItem {
+    public static func decode(_ data: JSValue) throws -> CompletionItem {
         throw "nyi"
     }
 }
 extension TextDocumentPositionParams: Decodable {
-    public static func from(json: JSValue) throws -> TextDocumentPositionParams {
+    public static func decode(_ data: JSValue) throws -> TextDocumentPositionParams {
         throw "nyi"
     }
 }
 extension ReferenceParams: Decodable {
-    public static func from(json: JSValue) throws -> ReferenceParams {
+    public static func decode(_ data: JSValue) throws -> ReferenceParams {
         throw "nyi"
     }
 }
 extension DocumentSymbolParams: Decodable {
-    public static func from(json: JSValue) throws -> DocumentSymbolParams {
+    public static func decode(_ data: JSValue) throws -> DocumentSymbolParams {
         throw "nyi"
     }
 }
 extension DocumentFormattingParams: Decodable {
-    public static func from(json: JSValue) throws -> DocumentFormattingParams {
+    public static func decode(_ data: JSValue) throws -> DocumentFormattingParams {
         throw "nyi"
     }
 }
 
 extension DocumentRangeFormattingParams: Decodable {
-    public static func from(json: JSValue) throws -> DocumentRangeFormattingParams {
+    public static func decode(_ data: JSValue) throws -> DocumentRangeFormattingParams {
         throw "nyi"
     }
 }
 extension DocumentOnTypeFormattingParams: Decodable {
-    public static func from(json: JSValue) throws -> DocumentOnTypeFormattingParams {
+    public static func decode(_ data: JSValue) throws -> DocumentOnTypeFormattingParams {
         throw "nyi"
     }
 }
 
 extension CodeActionParams: Decodable {
-    public static func from(json: JSValue) throws -> CodeActionParams {
+    public static func decode(_ data: JSValue) throws -> CodeActionParams {
         throw "nyi"
     }
 }
 
 extension CodeLensParams: Decodable {
-    public static func from(json: JSValue) throws -> CodeLensParams {
+    public static func decode(_ data: JSValue) throws -> CodeLensParams {
         throw "nyi"
     }
 }
 
 extension CodeLens: Decodable {
-    public static func from(json: JSValue) throws -> CodeLens {
+    public static func decode(_ data: JSValue) throws -> CodeLens {
         throw "nyi"
     }
 }
 
 extension DocumentLinkParams: Decodable {
-    public static func from(json: JSValue) throws -> DocumentLinkParams {
+    public static func decode(_ data: JSValue) throws -> DocumentLinkParams {
         throw "nyi"
     }
 }
 
 extension DocumentLink: Decodable {
-    public static func from(json: JSValue) throws -> DocumentLink {
+    public static func decode(_ data: JSValue) throws -> DocumentLink {
         throw "nyi"
     }
 }
 
 extension RenameParams: Decodable {
-    public static func from(json: JSValue) throws -> RenameParams {
+    public static func decode(_ data: JSValue) throws -> RenameParams {
         throw "nyi"
     }
 }

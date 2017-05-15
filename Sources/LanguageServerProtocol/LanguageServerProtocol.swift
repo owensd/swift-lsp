@@ -105,11 +105,11 @@ public protocol MessageProtocol {
 
 import JSONLib
 public protocol Encodable {
-    func toJson() -> JSValue
+    func encode() -> JSValue
 }
 
 public protocol Decodable {
-    static func from(json: JSValue) throws -> Self
+    static func decode(_ data: JSValue) throws -> Self
 }
 
 /// Defines the API to describe a command for the language server.

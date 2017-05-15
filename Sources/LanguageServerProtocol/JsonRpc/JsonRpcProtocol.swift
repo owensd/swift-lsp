@@ -98,7 +98,7 @@ public final class JsonRpcProtocol: MessageProtocol {
     /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
     /// error information about why the transformation could not be done.
     public func translate(response: ResponseMessage) throws -> MessageData {
-        let json = response.toJson().stringify(nil)                        
+        let json = response.encode().stringify(nil)                        
         let contentLength = json.characters.count
         let header = "Content-Length: \(contentLength)\r\nContent-Type: application/vscode-jsonrpc; charset=utf8\r\n\r\n"
         let message = "\(header)\(json)"
@@ -112,8 +112,8 @@ public final class JsonRpcProtocol: MessageProtocol {
 
     private func general(initialize json: JSValue) throws -> LanguageServerCommand {
         return .initialize(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try InitializeParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try InitializeParams.decode(json["params"]))
     }
 
     private func general(initialized json: JSValue) throws -> LanguageServerCommand {
@@ -121,7 +121,7 @@ public final class JsonRpcProtocol: MessageProtocol {
     }
 
     private func general(shutdown json: JSValue) throws -> LanguageServerCommand {
-        return .shutdown(requestId: try RequestId.from(json: json["id"]))
+        return .shutdown(requestId: try RequestId.decode(json["id"]))
     }
 
     private func general(exit json: JSValue) throws -> LanguageServerCommand {
@@ -129,194 +129,194 @@ public final class JsonRpcProtocol: MessageProtocol {
     }
 
     private func general(cancelRequest json: JSValue) throws -> LanguageServerCommand {
-        return .cancelRequest(params: try CancelParams.from(json: json["params"]))
+        return .cancelRequest(params: try CancelParams.decode(json["params"]))
     }
 
     private func window(showMessage json: JSValue) throws -> LanguageServerCommand {
-        return .windowShowMessage(params: try ShowMessageParams.from(json: json["params"]))
+        return .windowShowMessage(params: try ShowMessageParams.decode(json["params"]))
     }
 
     private func window(showMessageRequest json: JSValue) throws -> LanguageServerCommand {
         return .windowShowMessageRequest(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try ShowMessageRequestParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try ShowMessageRequestParams.decode(json["params"]))
     }
 
     private func window(logMessage json: JSValue) throws -> LanguageServerCommand {
-        return .windowLogMessage(params: try LogMessageParams.from(json: json["params"]))
+        return .windowLogMessage(params: try LogMessageParams.decode(json["params"]))
     }
 
     private func telemetry(event json: JSValue) throws -> LanguageServerCommand {
-        return .telemetryEvent(params: try LogMessageParams.from(json: json["params"]))
+        return .telemetryEvent(params: try LogMessageParams.decode(json["params"]))
     }
 
     private func client(registerCapability json: JSValue) throws -> LanguageServerCommand {
         return .clientRegisterCapability(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try RegistrationParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try RegistrationParams.decode(json["params"]))
     }
 
     private func client(unregisterCapability json: JSValue) throws -> LanguageServerCommand {
         return .clientUnregisterCapability(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try UnregistrationParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try UnregistrationParams.decode(json["params"]))
     }
 
     private func workspace(didChangeConfiguration json: JSValue) throws -> LanguageServerCommand {
-        return .workspaceDidChangeConfiguration(params: try DidChangeConfigurationParams.from(json: json["params"]))
+        return .workspaceDidChangeConfiguration(params: try DidChangeConfigurationParams.decode(json["params"]))
     }
 
     private func workspace(didChangeWatchedFiles json: JSValue) throws -> LanguageServerCommand {
-        return .workspaceDidChangeWatchedFiles(params: try DidChangeWatchedFilesParams.from(json: json["params"]))
+        return .workspaceDidChangeWatchedFiles(params: try DidChangeWatchedFilesParams.decode(json["params"]))
     }
 
     private func workspace(symbol json: JSValue) throws -> LanguageServerCommand {
         return .workspaceSymbol(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try WorkspaceSymbolParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try WorkspaceSymbolParams.decode(json["params"]))
     }
 
     private func workspace(executeCommand json: JSValue) throws -> LanguageServerCommand {
         return .workspaceExecuteCommand(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try ExecuteCommandParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try ExecuteCommandParams.decode(json["params"]))
     }
 
     private func workspace(applyEdit json: JSValue) throws -> LanguageServerCommand {
         return .workspaceApplyEdit(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try ApplyWorkspaceEditParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try ApplyWorkspaceEditParams.decode(json["params"]))
     }
 
     private func textDocument(publishDiagnostics json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentPublishDiagnostics(params: try PublishDiagnosticsParams.from(json: json["params"]))
+        return .textDocumentPublishDiagnostics(params: try PublishDiagnosticsParams.decode(json["params"]))
     }
 
     private func textDocument(didOpen json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentDidOpen(params: try DidOpenTextDocumentParams.from(json: json["params"]))
+        return .textDocumentDidOpen(params: try DidOpenTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(didChange json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentDidChange(params: try DidChangeTextDocumentParams.from(json: json["params"]))
+        return .textDocumentDidChange(params: try DidChangeTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(willSave json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentWillSave(params: try WillSaveTextDocumentParams.from(json: json["params"]))
+        return .textDocumentWillSave(params: try WillSaveTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(willSaveWaitUntil json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentWillSaveWaitUntil(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try WillSaveTextDocumentParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try WillSaveTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(didSave json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentDidSave(params: try DidSaveTextDocumentParams.from(json: json["params"]))
+        return .textDocumentDidSave(params: try DidSaveTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(didClose json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentDidClose(params: try DidCloseTextDocumentParams.from(json: json["params"]))
+        return .textDocumentDidClose(params: try DidCloseTextDocumentParams.decode(json["params"]))
     }
 
     private func textDocument(completion json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentCompletion(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try TextDocumentPositionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try TextDocumentPositionParams.decode(json["params"]))
     }
 
     private func completionItem(resolve json: JSValue) throws -> LanguageServerCommand {
         return .completionItemResolve(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try CompletionItem.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try CompletionItem.decode(json["params"]))
     }
 
     private func textDocument(hover json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentHover(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try TextDocumentPositionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try TextDocumentPositionParams.decode(json["params"]))
     }
 
     private func textDocument(signatureHelp json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentSignatureHelp(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try TextDocumentPositionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try TextDocumentPositionParams.decode(json["params"]))
     }
 
     private func textDocument(references json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentReferences(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try ReferenceParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try ReferenceParams.decode(json["params"]))
     }
 
     private func textDocument(documentHighlight json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentDocumentHighlight(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try TextDocumentPositionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try TextDocumentPositionParams.decode(json["params"]))
     }
 
     private func textDocument(documentSymbol json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentDocumentSymbol(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentSymbolParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentSymbolParams.decode(json["params"]))
     }
 
     private func textDocument(formatting json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentFormatting(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentFormattingParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentFormattingParams.decode(json["params"]))
     }
 
     private func textDocument(rangeFormatting json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentRangeFormatting(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentRangeFormattingParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentRangeFormattingParams.decode(json["params"]))
     }
 
     private func textDocument(onTypeFormatting json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentOnTypeFormatting(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentOnTypeFormattingParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentOnTypeFormattingParams.decode(json["params"]))
     }
 
     private func textDocument(definition json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentDefinition(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try TextDocumentPositionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try TextDocumentPositionParams.decode(json["params"]))
     }
 
     private func textDocument(codeAction json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentCodeAction(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try CodeActionParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try CodeActionParams.decode(json["params"]))
     }
 
     private func textDocument(codeLens json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentCodeLens(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try CodeLensParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try CodeLensParams.decode(json["params"]))
     }
 
     private func codeLens(resolve json: JSValue) throws -> LanguageServerCommand {
         return .codeLensResolve(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try CodeLens.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try CodeLens.decode(json["params"]))
     }
 
     private func textDocument(documentLink json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentDocumentLink(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentLinkParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentLinkParams.decode(json["params"]))
     }
 
     private func documentLink(resolve json: JSValue) throws -> LanguageServerCommand {
         return .documentLinkResolve(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try DocumentLink.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try DocumentLink.decode(json["params"]))
     }
 
     private func textDocument(rename json: JSValue) throws -> LanguageServerCommand {
         return .textDocumentRename(
-            requestId: try RequestId.from(json: json["id"]),
-            params: try RenameParams.from(json: json["params"]))
+            requestId: try RequestId.decode(json["id"]),
+            params: try RenameParams.decode(json["params"]))
     }
 }
