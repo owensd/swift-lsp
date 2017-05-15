@@ -5,7 +5,7 @@
 
 /// The set of parameters that are used for the `initialize` method.
 public struct InitializeParams {
-    public init(processId: Int? = nil, rootPath: String? = nil, rootUri: DocumentUri? = nil, initializationOptions: Decodable? = nil, capabilities: ClientCapabilities = ClientCapabilities(), trace: TraceSetting? = nil) {
+    public init(processId: Int? = nil, rootPath: String? = nil, rootUri: DocumentUri? = nil, initializationOptions: Any? = nil, capabilities: ClientCapabilities = ClientCapabilities(), trace: TraceSetting? = nil) {
         self.processId = processId
         self.rootPath = rootPath
         self.rootUri = rootUri
@@ -29,7 +29,7 @@ public struct InitializeParams {
 	public var rootUri: DocumentUri? = nil
 
 	/// User provided initialization options.
-	public var initializationOptions: Decodable? = nil
+	public var initializationOptions: Any? = nil
 
 	/// The capabilities provided by the client (editor or tool).
 	public var capabilities = ClientCapabilities()

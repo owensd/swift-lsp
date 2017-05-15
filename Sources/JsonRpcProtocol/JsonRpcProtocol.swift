@@ -4,18 +4,21 @@
  */
 
 import JSONLib
+import LanguageServerProtocol
 
 #if os(macOS)
 import os.log
 #endif
 
 @available(macOS 10.12, *)
-fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "JsonRpcProtocol")
+fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "JsonRpcProtocol")
 
-/// A general message as defined by JSON-RPC. 
-public protocol JsonRpcMessage {
-    /// The language server protocol always uses "2.0" as the jsonrpc version.
-    var jsonrpc: String { get }
+public protocol Encodable {
+    func encode() -> JSValue
+}
+
+public protocol Decodable {
+    static func decode(_ data: JSValue) throws -> Self
 }
 
 /// This provides the complete implementation necessary to translate an incoming message to a

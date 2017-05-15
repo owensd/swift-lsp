@@ -3,6 +3,14 @@
  * Licensed under the MIT License. See License in the project root for license information.
 */
 
+import LanguageServerProtocol
+import JSONLib
+
+/// A general message as defined by JSON-RPC. 
+public protocol JsonRpcMessage {
+    /// The language server protocol always uses "2.0" as the jsonrpc version.
+    var jsonrpc: String { get }
+}
 
 /// A request message to describe a request between the client and the server. Every processed
 /// request must send a response back to the sender of the request.
@@ -57,7 +65,7 @@ public struct ResponseMessage: JsonRpcMessage {
 
 /// A notification message. A processed notification message must not send a response back. They
 /// work like events.
-public struct NotificationMessage<ParamsType>: JsonRpcMessage {
+public struct NotificationMessage<ParamsType: Decodable>: JsonRpcMessage {
     /// The language server protocol always uses "2.0" as the jsonrpc version.
     public let jsonrpc: String = "2.0"
 
@@ -72,14 +80,6 @@ public struct NotificationMessage<ParamsType>: JsonRpcMessage {
         self.method = method
         self.params = params
     }
-}
-
-/// A request ID used to coordinate request/response pairs.
-public enum RequestId {
-    /// The numeric value for the request ID.
-    case number(Int)
-    /// The string value for the request ID.
-    case string(String)
 }
 
 /// Any given `ResponseMessage` can either return a result or an error.

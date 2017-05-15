@@ -4,13 +4,14 @@
  */
 
 import JSONLib
+import LanguageServerProtocol
 
 #if os(macOS)
 import os.log
 #endif
 
 @available(macOS 10.12, *)
-fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Encodable")
+fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "Encodable")
 
 public extension Encodable {
 	func encode() -> JSValue {

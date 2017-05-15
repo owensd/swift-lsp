@@ -4,7 +4,8 @@
  *
  * This is a common, JSON-RPC based protocol used to define interactions between a client endpoint,
  * such as a code editor, and a language server instance that is running. The transport mechanism
- * is not defined, nor is the language the server is running against.
+ * is not defined, nor is the language the server is running against. As such, all of the JSON-RPC
+ * specifics are not present in the base layer as defined here.
  *
  * Copyright (c) Kiad Studios, LLC. All rights reserved.
  * Licensed under the MIT License. See License in the project root for license information.
@@ -20,13 +21,13 @@ public typealias MessageData = [UInt8]
 /// purposes.
 public struct Message {
     /// The details for the message header.
-    let header: MessageHeader
+    public let header: MessageHeader
 
     /// The set of data that is coming as part of the message body. The size of this data is defined
     /// as the the `Content-Length` field within the message header. The encoding of this data
     /// should be defined with the `Content-Type` field within the message header; this defaults to
     /// UTF8.
-    let content: MessageData
+    public let content: MessageData
 }
 
 /// The header for all messages.
@@ -86,6 +87,9 @@ public protocol MessageProtocol {
     /// The internal type representation of the message content for the protocol.
     associatedtype ProtocolMessageType
 
+    /// The type used to transport the response from the protocol to the serialization layer.
+    associatedtype ResponseType
+
     /// The form for all message parsers. If the raw message data cannot be converted into a 
     /// `LanguageServerCommand`, the parser should throw with a detailed error message.
     typealias MessageParser = (ProtocolMessageType) throws -> LanguageServerCommand
@@ -100,17 +104,9 @@ public protocol MessageProtocol {
 
     /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
     /// error information about why the transformation could not be done.
-    func translate(response: ResponseMessage) throws -> MessageData
+    func translate(response: ResponseType) throws -> MessageData
 }
 
-import JSONLib
-public protocol Encodable {
-    func encode() -> JSValue
-}
-
-public protocol Decodable {
-    static func decode(_ data: JSValue) throws -> Self
-}
 
 /// Defines the API to describe a command for the language server.
 public enum LanguageServerCommand {
@@ -173,6 +169,14 @@ extension Message: CustomStringConvertible {
 
         return output
     }
+}
+
+/// A request ID used to coordinate request/response pairs.
+public enum RequestId {
+    /// The numeric value for the request ID.
+    case number(Int)
+    /// The string value for the request ID.
+    case string(String)
 }
 
 /// This is a utility class that provides a queueing mechanism for incoming messages. This is

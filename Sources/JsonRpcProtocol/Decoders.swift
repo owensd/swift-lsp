@@ -3,6 +3,8 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+import LanguageServerProtocol
+
 #if os(macOS)
 import os.log
 #endif
@@ -20,7 +22,7 @@ extension InitializeParams {
         let rootUri = data["rootUri"].string ?? nil
         // TODO(owensd): Support user options...
         //let initializationOptions = try type(of: initializationOptions).decode(json["initializationOptions"])
-        let initializationOptions: Decodable? = nil
+        let initializationOptions: Any? = nil
         let capabilities = try ClientCapabilities.decode(data["capabilities"])
         let trace = try TraceSetting.decode(data["trace"])
 
