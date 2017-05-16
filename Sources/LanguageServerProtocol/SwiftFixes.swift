@@ -7,17 +7,15 @@ extension String: Error {}
 
 #if os(Linux)
 // These are simply no-op stubs for now.
-
-struct OSLog {
-    init(subsystem: String, category: String) {}
+public struct OSLog {
+    public init(subsystem: String, category: String) {}
 }
 
-enum LogTool {
+public enum LogTool {
     case `default`
 }
 
-func os_log(_ string: String, log: OSLog, type: LogTool, _ args: Any...) {}
-
+public func os_log(_ string: String, log: OSLog, type: LogTool, _ args: Any...) {}
 #endif
 
 extension Array {

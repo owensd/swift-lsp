@@ -90,4 +90,12 @@ final class EncodableTests: XCTestCase {
         XCTAssertEqual(encoded["other"].array?.first?["message"].string, "hello")
         XCTAssertEqual(encoded["other"].array?.last?["message"].string, "world!")
     }
+
+    static var allTests = [
+        ("testEncodable001", testEncodable001),
+        ("testEncodable002", testEncodable002),
+        ("testEncodable003", testEncodable003),
+        ("testEncodable004", testEncodable004),
+        ("testEncodable005", testEncodable005),
+    ]
 }

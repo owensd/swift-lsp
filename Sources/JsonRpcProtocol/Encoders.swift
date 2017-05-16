@@ -14,37 +14,26 @@ import os.log
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "Encodable")
 
 public extension Encodable {
-	func encode() -> JSValue {
-		var json: JSValue = [:]
-		let mirror = Mirror(reflecting: self)
-		for (label, value) in mirror.children {
+    func encode() -> JSValue {
+        func cast<T>(_ x: Any, to: T.Type) -> T? {
+            return x as? T
+        }
+
+        var json: JSValue = [:]
+        let mirror = Mirror(reflecting: self)
+        for (label, value) in mirror.children {
             if let name = label {
-                if let value = value as? Encodable {
-    				json[name] = value.encode()
+                if let value = cast(value, to: Optional<Encodable>.self) {
+                    if let value = value {
+                        json[name] = value.encode()
+                    }
+                }
+                else if let value = cast(value, to: Array<Encodable>.self) {
+                    json[name] = value.encode()
                 }
                 else {
-                    // To check if the `Encodable` is actually an `Optional<Encodable>` we need to
-                    // go through a bit of a gymnastics go around.
-                    let valueMirror = Mirror(reflecting: value)
-                    if valueMirror.displayStyle == .optional {
-                        if let (_, some) = valueMirror.children.first {
-                            if let some = some as? Encodable {
-                                json[name] = some.encode()
-                            }
-                            else {
-                                if #available(macOS 10.12, *) {
-                                    os_log("Property %{public}@ does not support serialization", log: log, type: .default, name)
-                                }
-                            }
-                        }
-                        else {
-                            // `Optional.None` values will not be encoded at all.
-                        }
-                    }
-                    else {
-                        if #available(macOS 10.12, *) {
-                            os_log("Property %{public}@ does not support serialization", log: log, type: .default, name)
-                        }
+                    if #available(macOS 10.12, *) {
+                        os_log("Property '%{public}@' is not an encodable type.", log: log, type: .default, name)
                     }
                 }
             }
@@ -53,9 +42,10 @@ public extension Encodable {
                     os_log("Property does not have name.", log: log, type: .default)
                 }
             }
-		}
-		return json
-	}
+        }
+
+        return json
+    }
 }
 
 extension String: Encodable {
@@ -82,10 +72,10 @@ extension Int: Encodable {
     }
 }
 
-extension Array where Iterator.Element == String {
+extension Array where Iterator.Element == Encodable {
     public func encode() -> JSValue {
-        let content = self.joined(separator: ",")
-        return JSValue("[\(content)]")
+        let contents: [JSValue] = self.map { $0.encode() }
+        return JSValue(contents)
     }
 }
 
@@ -94,47 +84,16 @@ extension Array where Iterator.Element == String {
 
 extension ServerCapabilities: Encodable {}
 extension TextDocumentSyncOptions: Encodable {}
-
-extension TextDocumentSyncKind: Encodable {
-	public func encode() -> JSValue {
-		return JSValue(Double(self.rawValue))
-	}
-}
-
-extension CompletionOptions: Encodable {
-	public func encode() -> JSValue {
-		var json: JSValue = [:]
-		if let provider = self.resolveProvider {
-			json["resolveProvider"] = JSValue(provider)
-		}
-
-		if let triggers = self.triggerCharacters {
-			json["triggerCharacters"] = JSValue(triggers.joined(separator: ", "))
-		}
-
-		return json
-	}
-}
-
+extension TextDocumentSyncKind: Encodable {}
+extension CompletionOptions: Encodable {}
 extension CodeLensOptions: Encodable {}
-
-extension SignatureHelpOptions: Encodable {
-	public func encode() -> JSValue {
-		var json: JSValue = [:]
-		if let triggers = self.triggerCharacters {
-			json["triggerCharacters"] = JSValue(triggers.joined(separator: ", "))
-		}
-
-		return json
-	}
-}
-
+extension SignatureHelpOptions: Encodable {}
 extension DocumentOnTypeFormattingOptions: Encodable {}
 extension DocumentLinkOptions: Encodable {}
 extension ExecuteCommandOptions: Encodable {}
-
-
 extension ResponseMessage: Encodable {}
+extension InitializeResult: Encodable {}
+
 extension ResponseResult: Encodable {
     public func encode() -> JSValue {
         switch self {
@@ -163,5 +122,3 @@ extension RequestId: Encodable {
         }
     }
 }
-
-extension InitializeResult: Encodable {}
