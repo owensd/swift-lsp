@@ -100,7 +100,7 @@ public enum WorkspaceEdit {
 
 /// Text documents are identified using a URI. On the protocol level, URIs are passed as strings.
 /// The corresponding JSON structure looks like this:
-public class TextDocumentIdentifier {
+public struct TextDocumentIdentifier {
     /// The text document's URI.
 	public var uri: DocumentUri
 
@@ -133,13 +133,16 @@ public struct TextDocumentItem {
 }
 
 /// An identifier to denote a specific version of a text document.
-public final class VersionedTextDocumentIdentifier: TextDocumentIdentifier {
+public struct VersionedTextDocumentIdentifier /* : TextDocumentIdentifier */ {
+	/// The text document's URI.
+	public var uri: DocumentUri
+
 	/// The version number of this document.
 	public var version: Int
 
     public init(uri: DocumentUri, version: Int) {
+		self.uri = uri
         self.version = version
-        super.init(uri: uri)
     }
 }
 

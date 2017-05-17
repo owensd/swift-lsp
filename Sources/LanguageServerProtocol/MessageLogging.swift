@@ -48,6 +48,10 @@ public struct ShowMessageRequestParams {
 }
 
 public struct MessageActionItem {
+    public init(title: String) {
+        self.title = title
+    }
+    
 	/// A short title like 'Retry', 'Open Log' etc.
 	public var title: String
 }

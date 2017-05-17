@@ -54,7 +54,7 @@ public struct WorkspaceSymbolParams {
 }
 
 public struct ExecuteCommandParams {
-    public init(command: String, arguments: [Any]? = nil) {
+    public init(command: String, arguments: [String]? = nil) {
         self.command = command
         self.arguments = arguments
     }
@@ -63,7 +63,7 @@ public struct ExecuteCommandParams {
 	public var command: String
 
 	/// Arguments that the command should be invoked with.
-	public var arguments: [Any]?
+	public var arguments: [String]?
 }
 
 public struct ApplyWorkspaceEditParams {

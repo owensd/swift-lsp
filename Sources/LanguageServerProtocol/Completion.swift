@@ -37,60 +37,83 @@ public enum InsertTextFormat: Int {
 }
 
 public struct CompletionItem {
-    public init(label: String) {
-        self.label = label
-    }
+	public init(
+			label: String,
+			kind: CompletionItemKind? = nil,
+			detail: String? = nil, 
+			documentation: String? = nil, 
+			sortText: String? = nil, 
+			filterText: String? = nil, 
+			insertText: String? = nil, 
+			insertTextFormat: InsertTextFormat? = nil, 
+			textEdit: TextEdit? = nil, 
+			additionalTextEdits: [TextEdit]? = nil, 
+			command: Command? = nil,
+			data: Any? = nil) {
+	    self.label = label
+	    self.kind = kind
+	    self.detail = detail
+	    self.documentation = documentation
+	    self.sortText = sortText
+	    self.filterText = filterText
+	    self.insertText = insertText
+	    self.insertTextFormat = insertTextFormat
+	    self.textEdit = textEdit
+	    self.additionalTextEdits = additionalTextEdits
+	    self.command = command
+	    self.data = data
+	}
 
 	/// The label of this completion item. By default also the text that is inserted when selecting
 	/// this completion.
 	public var label: String
 
 	/// The kind of this completion item. Based of the kind an icon is chosen by the editor.
-	public var kind: CompletionItemKind? = nil
+	public var kind: CompletionItemKind?
 
 	/// A human-readable string with additional information
 	/// about this item, like type or symbol information.
-	public var detail: String? = nil
+	public var detail: String?
 
 	/// A human-readable string that represents a doc-comment.
-	public var documentation: String? = nil
+	public var documentation: String?
 
 	/// A string that should be used when comparing this item with other items. When `falsy` the
 	/// label is used.
-	public var sortText: String? = nil
+	public var sortText: String?
 
 	/// A string that should be used when filtering a set of completion items. When `falsy` the
 	/// label is used.
-	public var filterText: String? = nil
+	public var filterText: String?
 
 	/// A string that should be inserted a document when selecting this completion. When `falsy` the
 	/// label is used.
-	public var insertText: String? = nil
+	public var insertText: String?
 
 	/// The format of the insert text. The format applies to both the `insertText` property and the
 	/// `newText` property of a provided `textEdit`.
-	public var insertTextFormat: InsertTextFormat? = nil
+	public var insertTextFormat: InsertTextFormat?
 
 	/// An edit which is applied to a document when selecting this completion. When an edit is
 	/// provided the value of `insertText` is ignored.
 	///
 	/// Note: The range of the edit must be a single line range and it must contain the position at
 	/// which completion has been requested.
-	public var textEdit: TextEdit? = nil
+	public var textEdit: TextEdit?
 
 	/// An optional array of additional text edits that are applied when selecting this completion.
 	/// Edits must not overlap with the main edit nor with themselves.
-	public var additionalTextEdits: [TextEdit]? = nil
+	public var additionalTextEdits: [TextEdit]?
 
 	/// An optional command that is executed *after* inserting this completion.
     ///
     /// Note: that additional modifications to the current document should be described with the
     /// additionalTextEdits-property.
-	public var command: Command? = nil
+	public var command: Command?
 
 	/// An data entry field that is preserved on a completion item between a completion and a
 	/// completion resolve request.
-	public var data: Any? = nil
+	public var data: Any?
 }
 
 /// The kind of a completion entry.

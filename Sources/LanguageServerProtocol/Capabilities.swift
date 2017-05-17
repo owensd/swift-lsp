@@ -10,16 +10,23 @@
 /// still required that the client provides text document synchronization (e.g. open, changed and
 /// close notifications).
 public struct ClientCapabilities {
-	public init() {}
+	public init(
+			workspace: WorkspaceClientCapabilities? = nil,
+			textDocument: TextDocumentClientCapabilities? = nil,
+			experimental: Any? = nil) {
+		self.workspace = workspace
+		self.textDocument = textDocument
+		self.experimental = experimental
+	}
 
 	/// Workspace specific client capabilities.
-	public var workspace: WorkspaceClientCapabilities? = nil
+	public var workspace: WorkspaceClientCapabilities?
 
 	/// Text document specific client capabilities.
-	public var textDocument: TextDocumentClientCapabilities? = nil
+	public var textDocument: TextDocumentClientCapabilities?
 
 	/// Experimental client capabilities.
-	public var experimental: Any? = nil
+	public var experimental: Any?
 }
 
 /// `TextDocumentClientCapabilities` define capabilities the editor/tool provides on text documents.
