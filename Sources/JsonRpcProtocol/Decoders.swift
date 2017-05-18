@@ -14,6 +14,24 @@ import JSONLib
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Serialization")
 
+extension Bool: Decodable {
+    public static func decode(_ data: JSValue) throws -> Bool {
+        guard let value = data.bool else {
+            throw "Value is not of type `Bool`."
+        }
+        return value
+    }
+}
+
+extension String: Decodable {
+    public static func decode(_ data: JSValue) throws -> String {
+        guard let value = data.string else {
+            throw "Value is not of type `String`."
+        }
+        return value
+    }
+}
+
 extension InitializeParams {
     public static func decode(_ data: JSValue) throws -> InitializeParams {
         guard let _ = data.object else { throw "The `params` value must be a dictionary." }
@@ -102,16 +120,6 @@ extension ClientCapabilities: Decodable {
             workspace: workspace,
             textDocument: textDocument,
             experimental: experimental)
-	}
-}
-
-extension WorkspaceClientCapabilities: Decodable {
-	public static func decode(_ data: JSValue) throws -> WorkspaceClientCapabilities {
-        if let _ = data.object {
-            return WorkspaceClientCapabilities()
-        }
-
-        throw "The `workspace` key is not a valid object."
 	}
 }
 
@@ -767,27 +775,19 @@ extension DocumentLinkParams: Decodable {
 
 extension DocumentLink: Decodable {
     public static func decode(_ data: JSValue) throws -> DocumentLink {
-        let range = try LanguageServerProtocol.Range.decode(data["range"])
-        let target = data["target"].string
         return DocumentLink(
-            range: range,
-            target: target
+            range: try LanguageServerProtocol.Range.decode(data["range"]),
+            target: try String.decode(data["target"])
         )
     }
 }
 
 extension RenameParams: Decodable {
     public static func decode(_ data: JSValue) throws -> RenameParams {
-        let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
-        let position = try Position.decode(data["position"])
-        guard let newName = data["newName"].string else {
-            throw "The `newName` parameter is required."
-        }
-
         return RenameParams(
-            textDocument: textDocument,
-            position: position,
-            newName: newName
+            textDocument: try TextDocumentIdentifier.decode(data["textDocument"]),
+            position: try Position.decode(data["position"]),
+            newName: try String.decode(data["newName"])
         )
     }
 }
@@ -810,10 +810,55 @@ extension MessageType: Decodable {
 
 extension MessageActionItem: Decodable {
     public static func decode(_ data: JSValue) throws -> MessageActionItem {
-        guard let title = data["title"].string else {
-            throw "The `title` parameter is required."
-        }
+        return MessageActionItem(title: try String.decode(data["title"]))
+    }
+}
 
-        return MessageActionItem(title: title)
+extension DynamicRegistrationCapability: Decodable {
+    public static func decode(_ data: JSValue) throws -> DynamicRegistrationCapability {
+        return DynamicRegistrationCapability(
+            dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]))
+    }
+}
+
+extension CompletionCapability: Decodable {
+    public static func decode(_ data: JSValue) throws -> CompletionCapability {
+        return CompletionCapability(
+            dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
+            completionItem: try? CompletionItemCapability.decode(data["completionItem"]))
+    }
+}
+
+extension CompletionItemCapability: Decodable {
+    public static func decode(_ data: JSValue) throws -> CompletionItemCapability {
+        return CompletionItemCapability(snippetSupport: try? Bool.decode(data["snippetSupport"]))
+    }
+}
+
+extension SynchronizationCapability: Decodable {
+    public static func decode(_ data: JSValue) throws -> SynchronizationCapability {
+        return SynchronizationCapability(
+			dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
+			willSave: try? Bool.decode(data["willSave"]),
+			willSaveWaitUntil: try? Bool.decode(data["willSaveWaitUntil"]),
+			didSave: try? Bool.decode(data["didSave"]))
+    }
+}
+
+extension DocumentChangesCapability: Decodable {
+    public static func decode(_ data: JSValue) throws -> DocumentChangesCapability {
+        return DocumentChangesCapability(documentChanges: try? Bool.decode(data["documentChanges"]))
+    }
+}
+
+extension WorkspaceClientCapabilities: Decodable {
+    public static func decode(_ data: JSValue) throws -> WorkspaceClientCapabilities {
+        return WorkspaceClientCapabilities(
+			applyEdit: try? Bool.decode(data["applyEdit"]),
+			workspaceEdit: try? DocumentChangesCapability.decode(data["workspaceEdit"]),
+			didChangeConfiguration: try? DynamicRegistrationCapability.decode(data["didChangeConfiguration"]),
+			didChangeWatchedFiles: try? DynamicRegistrationCapability.decode(data["didChangeWatchedFiles"]),
+			symbol: try? DynamicRegistrationCapability.decode(data["symbol"]),
+			executeCommand: try? DynamicRegistrationCapability.decode(data["executeCommand"]))
     }
 }
