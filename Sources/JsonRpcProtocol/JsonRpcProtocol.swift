@@ -18,7 +18,7 @@ public protocol Encodable {
 }
 
 public protocol Decodable {
-    static func decode(_ data: JSValue) throws -> Self
+    static func decode(_ data: JSValue?) throws -> Self
 }
 
 /// This provides the complete implementation necessary to translate an incoming message to a
@@ -78,7 +78,7 @@ public final class JsonRpcProtocol: MessageProtocol {
     /// This is used to convert the raw incoming message to a `LanguageServerCommand`. The internals
     /// handle the JSON-RPC mechanism, but that doesn't need to be exposed.
     public func translate(message: Message) throws-> LanguageServerCommand {
-        guard let json = JSValue.parse(message.content).value else {
+        guard let json = try? JSValue.parse(message.content) else {
             throw "unable to parse the incoming message"
         }
             

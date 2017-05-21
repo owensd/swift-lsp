@@ -9,6 +9,6 @@ let package = Package(
         Target(name: "JsonRpcProtocol", dependencies: ["LanguageServerProtocol"])
     ],
     dependencies: [
-        .Package(url: "https://github.com/owensd/json-swift.git", majorVersion: 1, minor: 2)
+        .Package(url: "https://github.com/owensd/json-swift.git", majorVersion: 2, minor: 0)
     ]
 )

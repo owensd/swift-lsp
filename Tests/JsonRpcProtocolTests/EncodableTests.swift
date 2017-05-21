@@ -49,7 +49,7 @@ final class EncodableTests: XCTestCase {
         XCTAssertEqual(encoded["name"].string, "David")
         XCTAssertEqual(encoded["age"], 35)
         XCTAssertEqual(encoded["children"].array?.first?.string, "Natalie")
-        XCTAssertEqual(encoded["other"].hasValue, false)
+        XCTAssertTrue(encoded["other"] == nil)
     }
 
     func testEncodable004() {
