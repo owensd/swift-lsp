@@ -28,7 +28,7 @@ public final class StandardInputOutputBuffer: InputOutputBuffer {
     public init() {}
 
     /// Continuously monitors the `stdin`.
-    public func run(received: @escaping (Message) -> MessageData?) {
+    public func run(received: @escaping (Message) -> Message?) {
         inputQueue.async {
             let messageBuffer = MessageBuffer()
             var input = fd_set()
@@ -56,16 +56,10 @@ public final class StandardInputOutputBuffer: InputOutputBuffer {
                         let messages = messageBuffer.write(data: [UInt8](buffer[0..<bytesRead]))
                         for message in messages {
                             if let response = received(message) {
-                                let data = Data(bytes: response)
-                                if #available(macOS 10.12, *) {
-                                    if let encoded = String(data: data, encoding: .utf8) {
-                                        os_log("response sent:\n%{public}@", log: log, type: .default, encoded)
-                                    }
-                                    else {
-                                        os_log("response sent: <cannot decode>", log: log, type: .default)
-                                    }
-                                }
-                                FileHandle.standardOutput.write(data)
+                                let header = message.header.description.data(using: .utf8)!
+                                let content = Data(bytes: response.content)
+                                FileHandle.standardOutput.write(header)
+                                FileHandle.standardOutput.write(content)
                             }
                         }
                     }

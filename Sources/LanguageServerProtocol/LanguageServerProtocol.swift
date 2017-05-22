@@ -76,6 +76,17 @@ public struct MessageHeader {
     }
 }
 
+extension MessageHeader: CustomStringConvertible {
+    /// Provides the printout as required by the LSP spec.
+    public var description: String {
+        var content = ""
+        for (key, value) in self.headerFields {
+            content += "\(key): \(value)\r\n"
+        }
+        return content + "\r\n"
+    }
+}
+
 /// The bottom layer in the messaging stack that is the source of the raw message data.
 public protocol InputOutputBuffer {
     /// Starts listening for new messages to come in. Whenever a message comes in, the `received`
@@ -83,7 +94,7 @@ public protocol InputOutputBuffer {
     /// message.
     /// Implementation note: this function is intended to spawn a new thread for handling incoming
     /// message data. As such, this is a non-blocking function call.
-    func run(received: @escaping (Message) -> MessageData?)
+    func run(received: @escaping (Message) -> Message?)
 
     /// Used to signal that the message source should stop processing input feeds.
     func stop()
