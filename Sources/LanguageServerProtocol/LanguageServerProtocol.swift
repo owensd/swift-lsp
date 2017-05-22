@@ -87,9 +87,6 @@ public protocol MessageProtocol {
     /// The internal type representation of the message content for the protocol.
     associatedtype ProtocolMessageType
 
-    /// The type used to transport the response from the protocol to the serialization layer.
-    associatedtype ResponseType
-
     /// The form for all message parsers. If the raw message data cannot be converted into a 
     /// `LanguageServerCommand`, the parser should throw with a detailed error message.
     typealias MessageParser = (ProtocolMessageType) throws -> LanguageServerCommand
@@ -102,59 +99,96 @@ public protocol MessageProtocol {
     /// done.
     func translate(message: Message) throws -> LanguageServerCommand
 
-    /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
-    /// error information about why the transformation could not be done.
-    func translate(response: ResponseType) throws -> MessageData
+    /// Translates the response into a `Message`. This function can throw, providing detailed error
+    /// information about why the transformation could not be done.
+    func translate(response: LanguageServerResponse) throws -> Message
 }
 
 
 /// Defines the API to describe a command for the language server.
 public enum LanguageServerCommand {
-    case initialize(requestId: RequestId?, params: InitializeParams)
+    case initialize(requestId: RequestId, params: InitializeParams)
     case initialized
-    case shutdown(requestId: RequestId?)
+    case shutdown(requestId: RequestId)
     case exit
     case cancelRequest(params: CancelParams)
 
     case windowShowMessage(params: ShowMessageParams)
-    case windowShowMessageRequest(requestId: RequestId?, params: ShowMessageRequestParams)
+    case windowShowMessageRequest(requestId: RequestId, params: ShowMessageRequestParams)
     case windowLogMessage(params: LogMessageParams)
     case telemetryEvent(params: Any)
 
-    case clientRegisterCapability(requestId: RequestId?, params: RegistrationParams)
-    case clientUnregisterCapability(requestId: RequestId?, params: UnregistrationParams)
+    case clientRegisterCapability(requestId: RequestId, params: RegistrationParams)
+    case clientUnregisterCapability(requestId: RequestId, params: UnregistrationParams)
 
     case workspaceDidChangeConfiguration(params: DidChangeConfigurationParams)
     case workspaceDidChangeWatchedFiles(params: DidChangeWatchedFilesParams)
-    case workspaceSymbol(requestId: RequestId?, params: WorkspaceSymbolParams)
-    case workspaceExecuteCommand(requestId: RequestId?, params: ExecuteCommandParams)
-    case workspaceApplyEdit(requestId: RequestId?, params: ApplyWorkspaceEditParams)
+    case workspaceSymbol(requestId: RequestId, params: WorkspaceSymbolParams)
+    case workspaceExecuteCommand(requestId: RequestId, params: ExecuteCommandParams)
+    case workspaceApplyEdit(requestId: RequestId, params: ApplyWorkspaceEditParams)
 
     case textDocumentPublishDiagnostics(params: PublishDiagnosticsParams)
     case textDocumentDidOpen(params: DidOpenTextDocumentParams)
     case textDocumentDidChange(params: DidChangeTextDocumentParams)
     case textDocumentWillSave(params: WillSaveTextDocumentParams)
-    case textDocumentWillSaveWaitUntil(requestId: RequestId?, params: WillSaveTextDocumentParams)
+    case textDocumentWillSaveWaitUntil(requestId: RequestId, params: WillSaveTextDocumentParams)
     case textDocumentDidSave(params: DidSaveTextDocumentParams)
     case textDocumentDidClose(params: DidCloseTextDocumentParams)
-    case textDocumentCompletion(requestId: RequestId?, params: TextDocumentPositionParams)
-    case completionItemResolve(requestId: RequestId?, params: CompletionItem)
-    case textDocumentHover(requestId: RequestId?, params: TextDocumentPositionParams)
-    case textDocumentSignatureHelp(requestId: RequestId?, params: TextDocumentPositionParams)
-    case textDocumentReferences(requestId: RequestId?, params: ReferenceParams)
-    case textDocumentDocumentHighlight(requestId: RequestId?, params: TextDocumentPositionParams)
-    case textDocumentDocumentSymbol(requestId: RequestId?, params: DocumentSymbolParams)
-    case textDocumentFormatting(requestId: RequestId?, params: DocumentFormattingParams)
-    case textDocumentRangeFormatting(requestId: RequestId?, params: DocumentRangeFormattingParams)
-    case textDocumentOnTypeFormatting(requestId: RequestId?, params: DocumentOnTypeFormattingParams)
-    case textDocumentDefinition(requestId: RequestId?, params: TextDocumentPositionParams)
-    case textDocumentCodeAction(requestId: RequestId?, params: CodeActionParams)
-    case textDocumentCodeLens(requestId: RequestId?, params: CodeLensParams)
-    case codeLensResolve(requestId: RequestId?, params: CodeLens)
-    case textDocumentDocumentLink(requestId: RequestId?, params: DocumentLinkParams)
-    case documentLinkResolve(requestId: RequestId?, params: DocumentLink)
-    case textDocumentRename(requestId: RequestId?, params: RenameParams)
+    case textDocumentCompletion(requestId: RequestId, params: TextDocumentPositionParams)
+    case completionItemResolve(requestId: RequestId, params: CompletionItem)
+    case textDocumentHover(requestId: RequestId, params: TextDocumentPositionParams)
+    case textDocumentSignatureHelp(requestId: RequestId, params: TextDocumentPositionParams)
+    case textDocumentReferences(requestId: RequestId, params: ReferenceParams)
+    case textDocumentDocumentHighlight(requestId: RequestId, params: TextDocumentPositionParams)
+    case textDocumentDocumentSymbol(requestId: RequestId, params: DocumentSymbolParams)
+    case textDocumentFormatting(requestId: RequestId, params: DocumentFormattingParams)
+    case textDocumentRangeFormatting(requestId: RequestId, params: DocumentRangeFormattingParams)
+    case textDocumentOnTypeFormatting(requestId: RequestId, params: DocumentOnTypeFormattingParams)
+    case textDocumentDefinition(requestId: RequestId, params: TextDocumentPositionParams)
+    case textDocumentCodeAction(requestId: RequestId, params: CodeActionParams)
+    case textDocumentCodeLens(requestId: RequestId, params: CodeLensParams)
+    case codeLensResolve(requestId: RequestId, params: CodeLens)
+    case textDocumentDocumentLink(requestId: RequestId, params: DocumentLinkParams)
+    case documentLinkResolve(requestId: RequestId, params: DocumentLink)
+    case textDocumentRename(requestId: RequestId, params: RenameParams)
 }
+
+public enum LanguageServerResponse {
+    case initialize(requestId: RequestId, result: InitializeResult)
+    case shutdown(requestId: RequestId)
+
+    /// The show message request is sent from a server to a client to ask the client to display a
+    /// particular message in the user interface. In addition to the show message notification the
+    /// request allows to pass actions and to wait for an answer from the client.
+    case showMessageRequest(requestId: RequestId, result: ShowMessageRequestParams)
+
+    case clientRegisterCapability(requestId: RequestId)
+    case clientUnregisterCapability(requestId: RequestId)
+    
+    case workspaceSymbol(requestId: RequestId, result: [SymbolInformation])
+    case workspaceExecuteCommand(requestId: RequestId)
+
+    case completionItemResolve(requestId: RequestId, result: Hover)
+    case codeLensResolve(requestId: RequestId, result: CodeLens)
+    case documentLinkResolve(requestId: RequestId, result: DocumentLink)
+    
+    case textDocumentWillSaveWaitUntil(requestId: RequestId, result: [TextEdit])
+    case textDocumentCompletion(requestId: RequestId, result: CompletionListResult)
+    case textDocumentHover(requestId: RequestId, result: Hover)
+    case textDocumentSignatureHelp(requestId: RequestId, result: SignatureHelp)
+    case textDocumentReferences(requestId: RequestId, result: [Location])
+    case textDocumentDocumentHighlight(requestId: RequestId, result: [DocumentHighlight])
+    case textDocumentDocumentSymbol(requestId: RequestId, result: [SymbolInformation])
+    case textDocumentFormatting(requestId: RequestId, result: [TextEdit])
+    case textDocumentRangeFormatting(requestId: RequestId, result: [TextEdit])
+    case textDocumentOnTypeFormatting(requestId: RequestId, result: [TextEdit])
+    case textDocumentDefinition(requestId: RequestId, result: [Location])
+    case textDocumentCodeAction(requestId: RequestId, result: [Command])
+    case textDocumentCodeLens(requestId: RequestId, result: [CodeLens])
+    case textDocumentDocumentLink(requestId: RequestId, result: [DocumentLink]?)
+    case textDocumentRename(requestId: RequestId, result: WorkspaceEdit)
+}
+
 
 /// Helper to convert the message into a printable output.
 extension Message: CustomStringConvertible {
