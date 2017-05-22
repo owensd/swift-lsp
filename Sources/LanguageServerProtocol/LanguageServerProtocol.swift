@@ -28,6 +28,11 @@ public struct Message {
     /// should be defined with the `Content-Type` field within the message header; this defaults to
     /// UTF8.
     public let content: MessageData
+
+    public init(header: MessageHeader, content: MessageData) {
+        self.header = header
+        self.content = content
+    }
 }
 
 /// The header for all messages.
@@ -47,10 +52,14 @@ public struct MessageHeader {
     /// The default value for the `Content-Type` field if one is not explicitly given.
     public static let defaultContentType = "application/vscode-jsonrpc; charset=utf-8"
 
+    public init(headerFields: [String:String] = [:]) {
+        self.headerFields = headerFields
+    }
+
     /// The set of header fields. This parser will parse all header field values, not just those
     /// defined in the spec. Note that all values will be held as a string, any type coercion must
     /// be handled by the message consumer.
-    public var headerFields: [String:String] = [:]
+    public var headerFields: [String:String]
 
     /// Retrieves the value of `Content-Length` from `headerFields`.
     public var contentLength: Int {
@@ -157,9 +166,6 @@ public enum LanguageServerResponse {
     case initialize(requestId: RequestId, result: InitializeResult)
     case shutdown(requestId: RequestId)
 
-    /// The show message request is sent from a server to a client to ask the client to display a
-    /// particular message in the user interface. In addition to the show message notification the
-    /// request allows to pass actions and to wait for an answer from the client.
     case showMessageRequest(requestId: RequestId, result: ShowMessageRequestParams)
 
     case clientRegisterCapability(requestId: RequestId)

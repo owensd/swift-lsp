@@ -79,9 +79,6 @@ extension Array where Iterator.Element == Encodable {
     }
 }
 
-
-
-
 extension ServerCapabilities: Encodable {}
 extension TextDocumentSyncOptions: Encodable {}
 extension TextDocumentSyncKind: Encodable {}
@@ -93,6 +90,19 @@ extension DocumentLinkOptions: Encodable {}
 extension ExecuteCommandOptions: Encodable {}
 extension ResponseMessage: Encodable {}
 extension InitializeResult: Encodable {}
+extension ShowMessageRequestParams: Encodable {}
+extension SymbolInformation: Encodable {}
+extension Hover: Encodable {}
+extension CodeLens: Encodable {}
+extension DocumentLink: Encodable {}
+extension TextEdit: Encodable {}
+extension CompletionListResult: Encodable {}
+extension SignatureHelp: Encodable {}
+extension Location: Encodable {}
+extension DocumentHighlight: Encodable {}
+extension Command: Encodable {}
+extension WorkspaceEdit: Encodable {}
+
 
 extension ResponseResult: Encodable {
     public func encode() -> JSValue {
@@ -119,6 +129,64 @@ extension RequestId: Encodable {
         switch self {
         case let .number(value): return JSValue(Double(value))
         case let .string(value): return JSValue(value)
+        }
+    }
+}
+
+extension LanguageServerResponse: Encodable {
+    private func encode(_ requestId: RequestId, _ encodables: [Encodable]?) -> JSValue {
+        return [
+            "jsonrpc": "2.0",
+            "id": requestId.encode(),
+            "result": encodables?.encode() ?? nil]
+    }
+
+    private func encode(_ requestId: RequestId, _ encodable: Encodable?) -> JSValue {
+        return [
+            "jsonrpc": "2.0",
+            "id": requestId.encode(),
+            "result": encodable?.encode() ?? nil]
+    }
+
+    private func encode(_ requestId: RequestId) -> JSValue {
+        return [
+            "jsonrpc": "2.0",
+            "id": requestId.encode(),
+            "result": nil]
+    }
+
+    public func encode() -> JSValue {
+        switch self {
+        case let .initialize(requestId, result): return encode(requestId, result)
+        case let .shutdown(requestId): return encode(requestId)
+
+        case let .showMessageRequest(requestId, result): return encode(requestId, result)
+
+        case let .clientRegisterCapability(requestId): return encode(requestId)
+        case let .clientUnregisterCapability(requestId): return encode(requestId)
+        
+        case let .workspaceSymbol(requestId, result): return encode(requestId, result)
+        case let .workspaceExecuteCommand(requestId): return encode(requestId)
+
+        case let .completionItemResolve(requestId, result): return encode(requestId, result)
+        case let .codeLensResolve(requestId, result): return encode(requestId, result)
+        case let .documentLinkResolve(requestId, result): return encode(requestId, result)
+        
+        case let .textDocumentWillSaveWaitUntil(requestId, result): return encode(requestId, result)
+        case let .textDocumentCompletion(requestId, result): return encode(requestId, result)
+        case let .textDocumentHover(requestId, result): return encode(requestId, result)
+        case let .textDocumentSignatureHelp(requestId, result): return encode(requestId, result)
+        case let .textDocumentReferences(requestId, result): return encode(requestId, result)
+        case let .textDocumentDocumentHighlight(requestId, result): return encode(requestId, result)
+        case let .textDocumentDocumentSymbol(requestId, result): return encode(requestId, result)
+        case let .textDocumentFormatting(requestId, result): return encode(requestId, result)
+        case let .textDocumentRangeFormatting(requestId, result): return encode(requestId, result)
+        case let .textDocumentOnTypeFormatting(requestId, result): return encode(requestId, result)
+        case let .textDocumentDefinition(requestId, result): return encode(requestId, result)
+        case let .textDocumentCodeAction(requestId, result): return encode(requestId, result)
+        case let .textDocumentCodeLens(requestId, result): return encode(requestId, result)
+        case let .textDocumentDocumentLink(requestId, result): return encode(requestId, result)
+        case let .textDocumentRename(requestId, result): return encode(requestId, result)
         }
     }
 }
