@@ -174,7 +174,7 @@ public enum LanguageServerCommand {
 }
 
 public enum LanguageServerResponse {
-    case initialize(requestId: RequestId, result: InitializeResult)
+    case initialize(requestId: RequestId, result: ServerCapabilities)
     case shutdown(requestId: RequestId)
 
     case showMessageRequest(requestId: RequestId, result: ShowMessageRequestParams)
