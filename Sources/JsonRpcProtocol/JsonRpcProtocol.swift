@@ -104,7 +104,7 @@ public final class JsonRpcProtocol: MessageProtocol {
     /// Translates the response into a raw `MessageData`. This function can throw, providing detailed
     /// error information about why the transformation could not be done.
     public func translate(response: LanguageServerResponse) throws -> Message {
-        let json = response.encode().stringify()
+        let json = response.encode().stringify(nil)
         guard let data = json.data(using: .utf8) else {
             throw "unable to convert JSON into data stream"
         }
