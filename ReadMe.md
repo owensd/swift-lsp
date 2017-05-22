@@ -1,6 +1,6 @@
 # Language Server Protocol
 
-![travis-ci badge status](https://travis-ci.org/owensd/LanguageServerProtocol.svg?branch=master)
+![travis-ci badge status](https://travis-ci.org/owensd/swift-lsp.svg?branch=master)
 
 Welcome to the Swift implementation of the [Language Server Protocol][1]. This provides a complete
 implementation of v3.0 of the spec. The intention is to allow for the building of language servers
