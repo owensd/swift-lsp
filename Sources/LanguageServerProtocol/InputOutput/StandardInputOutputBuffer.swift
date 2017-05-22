@@ -58,8 +58,17 @@ public final class StandardInputOutputBuffer: InputOutputBuffer {
                             if let response = received(message) {
                                 let header = message.header.description.data(using: .utf8)!
                                 let content = Data(bytes: response.content)
+                                if #available(macOS 10.12, *) {
+                                    os_log("writing header:\n%{public}@", log: log, type: .default, message.header.description)
+                                    os_log("writing content:\n%{public}@", log: log, type: .default, String(data: content, encoding: .utf8)!)
+                                }
                                 FileHandle.standardOutput.write(header)
                                 FileHandle.standardOutput.write(content)
+                            }
+                            else {
+                                if #available(macOS 10.12, *) {
+                                    os_log("response was nil", log: log, type: .default)
+                                }
                             }
                         }
                     }
