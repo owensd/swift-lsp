@@ -32,6 +32,7 @@ public struct Message {
     public init(header: MessageHeader, content: MessageData) {
         self.header = header
         self.content = content
+
     }
 }
 

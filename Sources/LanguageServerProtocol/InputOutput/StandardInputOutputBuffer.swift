@@ -56,10 +56,10 @@ public final class StandardInputOutputBuffer: InputOutputBuffer {
                         let messages = messageBuffer.write(data: [UInt8](buffer[0..<bytesRead]))
                         for message in messages {
                             if let response = received(message) {
-                                let header = message.header.description.data(using: .utf8)!
+                                let header = response.header.description.data(using: .utf8)!
                                 let content = Data(bytes: response.content)
                                 if #available(macOS 10.12, *) {
-                                    os_log("writing header:\n%{public}@", log: log, type: .default, message.header.description)
+                                    os_log("writing header:\n%{public}@", log: log, type: .default, String(data: header, encoding: .utf8)!)
                                     os_log("writing content:\n%{public}@", log: log, type: .default, String(data: content, encoding: .utf8)!)
                                 }
                                 FileHandle.standardOutput.write(header)
