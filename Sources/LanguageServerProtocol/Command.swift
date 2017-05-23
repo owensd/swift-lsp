@@ -14,11 +14,11 @@ public struct Command {
 	}
 	
 	/// Title of the command, like `save`.
-	var title: String
+	public var title: String
 
     /// The identifier of the actual command handler.
-	var command: String
+	public var command: String
 
 	/// Arguments that the command handler should be invoked with.
-	var arguments: [Any]?
+	public var arguments: [Any]?
 }

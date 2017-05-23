@@ -22,14 +22,14 @@ public struct Diagnostic {
 	public var severity: DiagnosticSeverity?
 
 	/// The diagnostics code. Can be omitted.
-	var code: DiagnosticCode?
+	public var code: DiagnosticCode?
 
 	/// A human-readable string describing the source of this diagnostic, e.g. 'typescript' or
     /// 'super lint'.
-	var source: String?
+	public var source: String?
 
 	/// The diagnostics message.
-	var message: String
+	public var message: String
 }
 
 /// A code to use within the `Diagnostic` type.

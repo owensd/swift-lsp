@@ -6,89 +6,49 @@
 import XCTest
 @testable import LanguageServerProtocol
 @testable import JsonRpcProtocol
+import JSONLib
 
 final class EncodableTests: XCTestCase {
 
     func testEncodable001() {
-        struct Foo: Encodable {
-            let name: String
-            let age: Int
-        }
-
-        let encoded = Foo(name: "David", age: 35).encode()
-        XCTAssertEqual(encoded["name"].string, "David")
-        XCTAssertEqual(encoded["age"], 35)
+        let encoded = VersionedTextDocumentIdentifier(uri: "./foo/a.swift", version: 1).encode()
+        XCTAssertEqual(encoded["uri"].string, "./foo/a.swift")
+        XCTAssertEqual(encoded["version"].integer, 1)
     }
 
     func testEncodable002() {
-        struct Foo: Encodable {
-            let name: String
-            let age: Int
-            let children: [String]
-        }
-
-        let encoded = Foo(name: "David", age: 35, children: ["Natalie"]).encode()
-        XCTAssertEqual(encoded["name"].string, "David")
-        XCTAssertEqual(encoded["age"], 35)
-        XCTAssertEqual(encoded["children"].array?.first?.string, "Natalie")
+        let encoded = CompletionOptions(resolveProvider: true, triggerCharacters: [".", ";"]).encode()
+        XCTAssertEqual(encoded["resolveProvider"].bool, true)
+        XCTAssertEqual(encoded["triggerCharacters"].array?.first?.string, ".")
+        XCTAssertEqual(encoded["triggerCharacters"].array?.last?.string, ";")
     }
 
     func testEncodable003() {
-        struct Bar: Encodable {
-            let message: String
-        }
-
-        struct Foo: Encodable {
-            let name: String
-            let age: Int
-            let children: [String]
-            let other: Bar? = nil
-        }
-
-        let encoded = Foo(name: "David", age: 35, children: ["Natalie"]).encode()
-        XCTAssertEqual(encoded["name"].string, "David")
-        XCTAssertEqual(encoded["age"], 35)
-        XCTAssertEqual(encoded["children"].array?.first?.string, "Natalie")
-        XCTAssertTrue(encoded["other"] == nil)
+        let encoded = TextDocumentSyncKind.full.encode()
+        XCTAssertEqual(encoded.number, 1)
     }
 
     func testEncodable004() {
-        struct Bar: Encodable {
-            let message: String
-        }
+        let diagnostic = Diagnostic(
+            range: LanguageServerProtocol.Range(
+                start: Position(line: 1, character: 0),
+                end: Position(line: 1, character: 10)
+            ),
+            message: "happy days",
+            severity: .warning,
+            code: nil,
+            source: nil
+        )
 
-        struct Foo: Encodable {
-            let name: String
-            let age: Int
-            let children: [String]
-            let other: Bar?
-        }
-
-        let encoded = Foo(name: "David", age: 35, children: ["Natalie"], other: Bar(message: "hello!")).encode()
-        XCTAssertEqual(encoded["name"].string, "David")
-        XCTAssertEqual(encoded["age"], 35)
-        XCTAssertEqual(encoded["children"].array?.first?.string, "Natalie")
-        XCTAssertEqual(encoded["other"]["message"].string, "hello!")
-    }
-
-    func testEncodable005() {
-        struct Bar: Encodable {
-            let message: String
-        }
-
-        struct Foo: Encodable {
-            let name: String
-            let age: Int
-            let children: [String]
-            let other: [Bar]?
-        }
-
-        let encoded = Foo(name: "David", age: 35, children: ["Natalie"], other: [Bar(message: "hello"), Bar(message: "world!")]).encode()
-        XCTAssertEqual(encoded["name"].string, "David")
-        XCTAssertEqual(encoded["age"], 35)
-        XCTAssertEqual(encoded["children"].array?.first?.string, "Natalie")
-        XCTAssertEqual(encoded["other"].array?.first?["message"].string, "hello")
-        XCTAssertEqual(encoded["other"].array?.last?["message"].string, "world!")
+        let encoded = diagnostic.encode()
+        XCTAssertEqual(encoded["range"]["start"]["line"].integer, 1)
+        XCTAssertEqual(encoded["range"]["start"]["character"].integer, 0)
+        XCTAssertEqual(encoded["range"]["end"]["line"].integer, 1)
+        XCTAssertEqual(encoded["range"]["end"]["character"].integer, 10)
+        XCTAssertEqual(encoded["severity"].integer, 2)
+        XCTAssertTrue(encoded["code"] == nil)
+        XCTAssertTrue(encoded["source"] == nil)
+        XCTAssertEqual(encoded["message"].string, "happy days")
     }
 
     static var allTests = [
@@ -96,6 +56,5 @@ final class EncodableTests: XCTestCase {
         ("testEncodable002", testEncodable002),
         ("testEncodable003", testEncodable003),
         ("testEncodable004", testEncodable004),
-        ("testEncodable005", testEncodable005),
     ]
 }

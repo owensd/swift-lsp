@@ -5,6 +5,7 @@
 
 import JSONLib
 import LanguageServerProtocol
+import Foundation
 
 #if os(macOS)
 import os.log
