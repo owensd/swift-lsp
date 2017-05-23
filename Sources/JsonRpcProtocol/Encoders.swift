@@ -88,7 +88,6 @@ extension SignatureHelpOptions: Encodable {}
 extension DocumentOnTypeFormattingOptions: Encodable {}
 extension DocumentLinkOptions: Encodable {}
 extension ExecuteCommandOptions: Encodable {}
-extension ResponseMessage: Encodable {}
 extension InitializeResult: Encodable {}
 extension ShowMessageRequestParams: Encodable {}
 extension SymbolInformation: Encodable {}
@@ -102,27 +101,6 @@ extension Location: Encodable {}
 extension DocumentHighlight: Encodable {}
 extension Command: Encodable {}
 extension WorkspaceEdit: Encodable {}
-
-
-extension ResponseResult: Encodable {
-    public func encode() -> JSValue {
-        switch self {
-        case let .result(encodable):
-            if let encodable = encodable {
-                return encodable.encode()
-            }
-            return nil
-        case let .error(code, message, data):
-            var json: JSValue = [:]
-            json["code"] = JSValue(Double(code))
-            json["message"] = JSValue(message)
-            if let data = data {
-                json["data"] = data.encode()
-            }
-            return json
-        }
-    }
-}
 
 extension RequestId: Encodable {
     public func encode() -> JSValue {

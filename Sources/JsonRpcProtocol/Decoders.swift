@@ -82,25 +82,6 @@ extension RequestId: Decodable {
     }
 }
 
-extension RequestMessage: Decodable {
-    public static func decode(_ data: JSValue?) throws -> RequestMessage {
-        let requestId = try RequestId.decode(data["requestId"])
-        guard let jsonrpc = data["jsonrpc"].string else {
-            throw "A request requires a `jsonrpc` member."
-        }
-        if jsonrpc != "2.0" {
-            throw "The only valid value for `jsonrpc` is `2.0`."
-        }
-        guard let method = data["method"].string else {
-            throw "A request requires a `method` member."
-        }
-        let params = try ParamsType.decode(data["params"])
-
-        return RequestMessage(id: requestId, method: method, params: params)
-    }
-}
-
-
 extension CancelParams: Decodable {
     public static func decode(_ data: JSValue?) throws -> CancelParams {
         return CancelParams(id: try RequestId.decode(data["id"]))

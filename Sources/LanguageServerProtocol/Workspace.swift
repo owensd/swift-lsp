@@ -3,7 +3,6 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
-
 public struct DidChangeConfigurationParams {
     public init(settings: Any) {
         self.settings = settings
