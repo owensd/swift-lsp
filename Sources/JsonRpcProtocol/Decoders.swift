@@ -15,6 +15,8 @@ import JSONLib
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Serialization")
 
 extension Bool: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Bool {
         guard let value = data.bool else {
             throw "Value is not of type `Bool`."
@@ -24,6 +26,8 @@ extension Bool: Decodable {
 }
 
 extension String: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> String {
         guard let value = data.string else {
             throw "Value is not of type `String`."
@@ -56,7 +60,9 @@ extension InitializeParams {
 }
 
 extension TraceSetting: Decodable {
-	public static func decode(_ data: JSValue?) throws -> TraceSetting {
+    public typealias EncodableType = JSValue
+
+    public static func decode(_ data: JSValue?) throws -> TraceSetting {
 		guard let value = data.string else {
 			throw "The trace setting must be a string or not present."
 		}
@@ -70,6 +76,8 @@ extension TraceSetting: Decodable {
 }
 
 extension RequestId: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> RequestId {
         if let value = data.string {
             return .string(value)
@@ -83,13 +91,17 @@ extension RequestId: Decodable {
 }
 
 extension CancelParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CancelParams {
         return CancelParams(id: try RequestId.decode(data["id"]))
     }
 }
 
 extension ClientCapabilities: Decodable {
-	public static func decode(_ data: JSValue?) throws -> ClientCapabilities {
+    public typealias EncodableType = JSValue
+
+    public static func decode(_ data: JSValue?) throws -> ClientCapabilities {
         let workspace = try? WorkspaceClientCapabilities.decode(data["workspace"])
         let textDocument = try? TextDocumentClientCapabilities.decode(data["workspace"])
         
@@ -104,7 +116,9 @@ extension ClientCapabilities: Decodable {
 }
 
 extension TextDocumentClientCapabilities: Decodable {
-	public static func decode(_ data: JSValue?) throws -> TextDocumentClientCapabilities {
+    public typealias EncodableType = JSValue
+
+    public static func decode(_ data: JSValue?) throws -> TextDocumentClientCapabilities {
         if let _ = data.object {
             return TextDocumentClientCapabilities()
         }
@@ -114,6 +128,8 @@ extension TextDocumentClientCapabilities: Decodable {
 }
 
 extension ShowMessageParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ShowMessageParams {
         guard let type = try? MessageType.decode(data["type"]) else {
             throw "The `type` parameter is required."
@@ -127,6 +143,8 @@ extension ShowMessageParams: Decodable {
 }
 
 extension ShowMessageRequestParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ShowMessageRequestParams {
         guard let type = try? MessageType.decode(data["type"]) else {
             throw "The `type` parameter is required."
@@ -145,6 +163,8 @@ extension ShowMessageRequestParams: Decodable {
 }
 
 extension LogMessageParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> LogMessageParams {
         guard let type = try? MessageType.decode(data["type"]) else {
             throw "The `type` parameter is required."
@@ -158,6 +178,8 @@ extension LogMessageParams: Decodable {
 }
 
 extension RegistrationParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> RegistrationParams {
         guard let values = data["registrations"].array else {
             throw "The `registrations` parameter is required."
@@ -169,6 +191,8 @@ extension RegistrationParams: Decodable {
 }
 
 extension Registration: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Registration {
         guard let id = data["id"].string else {
             throw "The `id` parameter is required."
@@ -184,6 +208,8 @@ extension Registration: Decodable {
 }
 
 extension UnregistrationParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> UnregistrationParams {
         guard let values = data["unregisterations"].array else {
             throw "The `unregisterations` parameter is required."
@@ -195,6 +221,8 @@ extension UnregistrationParams: Decodable {
 }
 
 extension Unregistration: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Unregistration {
         guard let id = data["id"].string else {
             throw "The `id` parameter is required."
@@ -208,6 +236,8 @@ extension Unregistration: Decodable {
 }
 
 extension DidChangeConfigurationParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
         // TODO(owensd): Figure out how this gets decoded...
         return DidChangeConfigurationParams(settings: "")
@@ -215,6 +245,8 @@ extension DidChangeConfigurationParams: Decodable {
 }
 
 extension DidChangeWatchedFilesParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidChangeWatchedFilesParams {
         guard let changes = data["changes"].array else {
             throw "The `changes` property is required."
@@ -226,6 +258,8 @@ extension DidChangeWatchedFilesParams: Decodable {
 }
 
 extension FileEvent: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> FileEvent {
         guard let uri = data["uri"].string else {
             throw "The `uri` parameter is required."
@@ -237,6 +271,8 @@ extension FileEvent: Decodable {
 }
 
 extension FileChangeType: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> FileChangeType {
         guard let number = data.integer else {
             throw "The parameter must be a number."
@@ -251,6 +287,8 @@ extension FileChangeType: Decodable {
 }
 
 extension WorkspaceSymbolParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> WorkspaceSymbolParams {
         guard let query = data["query"].string else {
             throw "The `query` parameter is required."
@@ -261,6 +299,8 @@ extension WorkspaceSymbolParams: Decodable {
 }
 
 extension ExecuteCommandParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ExecuteCommandParams {
         guard let command = data["command"].string else {
             throw "The `command` parameter is required."
@@ -276,6 +316,8 @@ extension ExecuteCommandParams: Decodable {
 }
 
 extension ApplyWorkspaceEditParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ApplyWorkspaceEditParams {
         let edit = try WorkspaceEdit.decode(data["edit"])
         return ApplyWorkspaceEditParams(edit: edit)
@@ -283,6 +325,8 @@ extension ApplyWorkspaceEditParams: Decodable {
 }
 
 extension WorkspaceEdit: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> WorkspaceEdit {
         if let _ = data["changes"].object {
             throw "The `changes` parameter is not currently implemented."
@@ -297,6 +341,8 @@ extension WorkspaceEdit: Decodable {
 }
 
 extension TextDocumentEdit: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentEdit {
         let textDocument = try VersionedTextDocumentIdentifier.decode(data["textDocument"])
         guard let values = data["edits"].array else {
@@ -308,6 +354,8 @@ extension TextDocumentEdit: Decodable {
 }
 
 extension TextDocumentIdentifier: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentIdentifier {
         guard let uri = data["uri"].string else {
             throw "The `uri` parameter is required."
@@ -317,6 +365,8 @@ extension TextDocumentIdentifier: Decodable {
 }
 
 extension VersionedTextDocumentIdentifier: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> VersionedTextDocumentIdentifier {
         let uri = try TextDocumentIdentifier.decode(data).uri
         guard let version = data["version"].integer else {
@@ -328,6 +378,8 @@ extension VersionedTextDocumentIdentifier: Decodable {
 }
 
 extension TextEdit: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextEdit {
         let range = try Range.decode(data["range"])
         guard let newText = data["newText"].string else {
@@ -339,6 +391,8 @@ extension TextEdit: Decodable {
 }
 
 extension LanguageServerProtocol.Range: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> LanguageServerProtocol.Range {
         let start = try Position.decode(data["start"])
         let end = try Position.decode(data["end"])
@@ -347,6 +401,8 @@ extension LanguageServerProtocol.Range: Decodable {
 }
 
 extension Position: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Position {
         guard let line = data["line"].integer else {
             throw "The `line` parameter is required."
@@ -360,6 +416,8 @@ extension Position: Decodable {
 }
 
 extension PublishDiagnosticsParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> PublishDiagnosticsParams {
         guard let uri = data["uri"].string else {
             throw "The `uri` parameter is required."
@@ -373,6 +431,8 @@ extension PublishDiagnosticsParams: Decodable {
 }
 
 extension Diagnostic: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Diagnostic {
         let range = try Range.decode(data["range"])
         guard let message = data["message"].string else {
@@ -394,6 +454,8 @@ extension Diagnostic: Decodable {
 }
 
 extension DiagnosticSeverity: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DiagnosticSeverity {
         guard let number = data.integer else {
             throw "The parameter must be an integer."
@@ -407,6 +469,8 @@ extension DiagnosticSeverity: Decodable {
 }
 
 extension DiagnosticCode: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DiagnosticCode {
         if let number = data.integer {
             return .number(number)
@@ -420,6 +484,8 @@ extension DiagnosticCode: Decodable {
 }
 
 extension DidOpenTextDocumentParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidOpenTextDocumentParams {
         let textDocument = try TextDocumentItem.decode(data["textDocument"])
         return DidOpenTextDocumentParams(textDocument: textDocument)
@@ -427,6 +493,8 @@ extension DidOpenTextDocumentParams: Decodable {
 }
 
 extension TextDocumentItem: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentItem {
         guard let uri = data["uri"].string else {
             throw "The `uri` parameter is required."
@@ -454,6 +522,8 @@ extension TextDocumentItem: Decodable {
 }
 
 extension DidChangeTextDocumentParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidChangeTextDocumentParams {
         let textDocument = try VersionedTextDocumentIdentifier.decode(data["textDocument"])
         guard let changes = data["contentChanges"].array else {
@@ -468,6 +538,8 @@ extension DidChangeTextDocumentParams: Decodable {
 }
 
 extension TextDocumentContentChangeEvent: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentContentChangeEvent {
         guard let text = data["text"].string else {
             throw "The `text` parameter is required."
@@ -485,6 +557,8 @@ extension TextDocumentContentChangeEvent: Decodable {
 }
 
 extension WillSaveTextDocumentParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> WillSaveTextDocumentParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let reason = try TextDocumentSaveReason.decode(data["reason"])
@@ -497,6 +571,8 @@ extension WillSaveTextDocumentParams: Decodable {
 }
 
 extension TextDocumentSaveReason: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentSaveReason {
         guard let value = data.integer else {
             throw "The parameter must be an integer."
@@ -510,6 +586,8 @@ extension TextDocumentSaveReason: Decodable {
 }
 
 extension DidSaveTextDocumentParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidSaveTextDocumentParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let text = data["text"].string
@@ -522,6 +600,8 @@ extension DidSaveTextDocumentParams: Decodable {
 }
 
 extension DidCloseTextDocumentParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DidCloseTextDocumentParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         return DidCloseTextDocumentParams(textDocument: textDocument)
@@ -529,6 +609,8 @@ extension DidCloseTextDocumentParams: Decodable {
 }
 
 extension CompletionItem: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CompletionItem {
         guard let label = data["label"].string else {
             throw "The `label` parameter is required."
@@ -570,6 +652,8 @@ extension CompletionItem: Decodable {
 }
 
 extension CompletionItemKind: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CompletionItemKind {
         guard let number = data.integer else {
             throw "The parameter must be an integer."
@@ -583,6 +667,8 @@ extension CompletionItemKind: Decodable {
 }
 
 extension Command: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> Command {
         guard let title = data["title"].string else {
             throw "The `title` parameter is required."
@@ -604,6 +690,8 @@ extension Command: Decodable {
 }
 
 extension TextDocumentPositionParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> TextDocumentPositionParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let position = try Position.decode(data["position"])
@@ -615,6 +703,8 @@ extension TextDocumentPositionParams: Decodable {
 }
 
 extension ReferenceParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ReferenceParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let position = try Position.decode(data["position"])
@@ -628,6 +718,8 @@ extension ReferenceParams: Decodable {
 }
 
 extension ReferenceContext: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> ReferenceContext {
         guard let include = data["includeDeclaration"].bool else {
             throw "The `include` parameter is required."
@@ -638,6 +730,8 @@ extension ReferenceContext: Decodable {
 }
 
 extension DocumentSymbolParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentSymbolParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         return DocumentSymbolParams(textDocument: textDocument)
@@ -645,6 +739,8 @@ extension DocumentSymbolParams: Decodable {
 }
 
 extension DocumentFormattingParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentFormattingParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let options = try FormattingOptions.decode(data["options"])
@@ -656,6 +752,8 @@ extension DocumentFormattingParams: Decodable {
 }
 
 extension FormattingOptions: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> FormattingOptions {
         guard let tabSize = data["tabSize"].integer else {
             throw "The `tabSize` parameter is required."
@@ -672,6 +770,8 @@ extension FormattingOptions: Decodable {
 }
 
 extension DocumentRangeFormattingParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentRangeFormattingParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let range = try LanguageServerProtocol.Range.decode(data["range"])
@@ -685,6 +785,8 @@ extension DocumentRangeFormattingParams: Decodable {
 }
 
 extension DocumentOnTypeFormattingParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentOnTypeFormattingParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let position = try Position.decode(data["position"])
@@ -702,6 +804,8 @@ extension DocumentOnTypeFormattingParams: Decodable {
 }
 
 extension CodeActionParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CodeActionParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         let range = try LanguageServerProtocol.Range.decode(data["range"])
@@ -715,6 +819,8 @@ extension CodeActionParams: Decodable {
 }
 
 extension CodeActionContext: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CodeActionContext {
         guard let values = data["diagnostics"].array else {
             throw "The `diagnostics` parameter is required."
@@ -726,6 +832,8 @@ extension CodeActionContext: Decodable {
 }
 
 extension CodeLensParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CodeLensParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         return CodeLensParams(textDocument: textDocument)
@@ -733,6 +841,8 @@ extension CodeLensParams: Decodable {
 }
 
 extension CodeLens: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CodeLens {
         let range = try LanguageServerProtocol.Range.decode(data["range"])
         let command = try? Command.decode(data["command"])
@@ -747,6 +857,8 @@ extension CodeLens: Decodable {
 }
 
 extension DocumentLinkParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentLinkParams {
         let textDocument = try TextDocumentIdentifier.decode(data["textDocument"])
         return DocumentLinkParams(textDocument: textDocument)
@@ -754,6 +866,8 @@ extension DocumentLinkParams: Decodable {
 }
 
 extension DocumentLink: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentLink {
         return DocumentLink(
             range: try LanguageServerProtocol.Range.decode(data["range"]),
@@ -763,6 +877,8 @@ extension DocumentLink: Decodable {
 }
 
 extension RenameParams: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> RenameParams {
         return RenameParams(
             textDocument: try TextDocumentIdentifier.decode(data["textDocument"]),
@@ -773,6 +889,8 @@ extension RenameParams: Decodable {
 }
 
 extension MessageType: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> MessageType {
         guard let value = data.integer else {
             throw "The message type must be a number."
@@ -789,12 +907,16 @@ extension MessageType: Decodable {
 }
 
 extension MessageActionItem: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> MessageActionItem {
         return MessageActionItem(title: try String.decode(data["title"]))
     }
 }
 
 extension DynamicRegistrationCapability: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DynamicRegistrationCapability {
         return DynamicRegistrationCapability(
             dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]))
@@ -802,6 +924,8 @@ extension DynamicRegistrationCapability: Decodable {
 }
 
 extension CompletionCapability: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CompletionCapability {
         return CompletionCapability(
             dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
@@ -810,12 +934,16 @@ extension CompletionCapability: Decodable {
 }
 
 extension CompletionItemCapability: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> CompletionItemCapability {
         return CompletionItemCapability(snippetSupport: try? Bool.decode(data["snippetSupport"]))
     }
 }
 
 extension SynchronizationCapability: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> SynchronizationCapability {
         return SynchronizationCapability(
 			dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
@@ -826,12 +954,16 @@ extension SynchronizationCapability: Decodable {
 }
 
 extension DocumentChangesCapability: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> DocumentChangesCapability {
         return DocumentChangesCapability(documentChanges: try? Bool.decode(data["documentChanges"]))
     }
 }
 
 extension WorkspaceClientCapabilities: Decodable {
+    public typealias EncodableType = JSValue
+
     public static func decode(_ data: JSValue?) throws -> WorkspaceClientCapabilities {
         return WorkspaceClientCapabilities(
 			applyEdit: try? Bool.decode(data["applyEdit"]),

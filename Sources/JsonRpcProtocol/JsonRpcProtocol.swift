@@ -13,17 +13,6 @@ import os.log
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "JsonRpcProtocol")
 
-public protocol Encodable {
-    func encode() -> JSValue
-}
-
-public protocol Decodable {
-    static func decode(_ data: JSValue?) throws -> Self
-}
-
-public typealias Codeable = Encodable & Decodable
-
-
 /// This provides the complete implementation necessary to translate an incoming message to a
 /// `LanguageServiceCommand`.
 public final class JsonRpcProtocol: MessageProtocol {

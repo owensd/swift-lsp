@@ -14,6 +14,24 @@
 // The type of data that is send from the `InputBuffer`.
 public typealias MessageData = [UInt8]
 
+/// Defines a generic protocol used to encode a given type into the data necessary for use within
+/// the `MessageProtocol` layers.
+public protocol Encodable {
+    associatedtype EncodableType
+    func encode() -> EncodableType
+}
+
+/// Defines a generic protocol used to decode a given type into the data necessary for use within
+/// the `MessageProtocol` layers.
+public protocol Decodable {
+    associatedtype EncodableType
+    static func decode(_ data: EncodableType?) throws -> Self
+}
+
+/// Defines a type that is both `Encodable` and `Decodable`.
+public typealias Codeable = Encodable & Decodable
+
+
 /// Defines the body of the message contract defined in the `Language Server Protocol`. This
 /// provides one additional layer of provide a `data` agnostic approach to passing the data around.
 /// While the spec call for JSON-RPC only, this `Message` allows authors to provide a different

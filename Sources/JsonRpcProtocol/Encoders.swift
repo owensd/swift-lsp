@@ -14,35 +14,36 @@ import os.log
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "Encodable")
 
 public extension Encodable {
+
     func encode() -> JSValue {
         func cast<T>(_ x: Any, to: T.Type) -> T? {
             return x as? T
         }
 
-        var json: JSValue = [:]
-        let mirror = Mirror(reflecting: self)
-        for (label, value) in mirror.children {
-            if let name = label {
-                if let value = cast(value, to: Optional<Encodable>.self) {
-                    if let value = value {
-                        json[name] = value.encode()
-                    }
-                }
-                else if let value = cast(value, to: Array<Encodable>.self) {
-                    json[name] = value.encode()
-                }
-                else {
-                    if #available(macOS 10.12, *) {
-                        os_log("Property '%{public}@' is not an encodable type.", log: log, type: .default, name)
-                    }
-                }
-            }
-            else {
-                if #available(macOS 10.12, *) {
-                    os_log("Property does not have name.", log: log, type: .default)
-                }
-            }
-        }
+        let json: JSValue = [:]
+        // let mirror = Mirror(reflecting: self)
+        // for (label, value) in mirror.children {
+        //     if let name = label {
+        //         if let value = cast(value, to: Optional<EncodableType>.self) {
+        //             if let value = value {
+        //                 json[name] = value.encode()
+        //             }
+        //         }
+        //         else if let value = cast(value, to: Array<EncodableType>.self) {
+        //             json[name] = value.encode()
+        //         }
+        //         else {
+        //             if #available(macOS 10.12, *) {
+        //                 os_log("Property '%{public}@' is not an encodable type.", log: log, type: .default, name)
+        //             }
+        //         }
+        //     }
+        //     else {
+        //         if #available(macOS 10.12, *) {
+        //             os_log("Property does not have name.", log: log, type: .default)
+        //         }
+        //     }
+        // }
 
         return json
     }
@@ -112,14 +113,14 @@ extension RequestId: Encodable {
 }
 
 extension LanguageServerResponse: Encodable {
-    private func encode(_ requestId: RequestId, _ encodables: [Encodable]?) -> JSValue {
+    private func encode<EncodingType>(_ requestId: RequestId, _ encodables: [EncodingType]?) -> JSValue where EncodingType: Encodable {
         return [
             "jsonrpc": "2.0",
             "id": requestId.encode(),
-            "result": encodables?.encode() ?? nil]
+            "result": /* FIX THIS!! encodables?.encode() ?? */ nil]
     }
 
-    private func encode(_ requestId: RequestId, _ encodable: Encodable?) -> JSValue {
+    private func encode<EncodingType>(_ requestId: RequestId, _ encodable: EncodingType?) -> JSValue where EncodingType: Encodable {
         return [
             "jsonrpc": "2.0",
             "id": requestId.encode(),
