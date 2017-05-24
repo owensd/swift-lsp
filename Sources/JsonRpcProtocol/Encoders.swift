@@ -63,8 +63,9 @@ extension Command: Encodable {
         var json: JSValue = [:]
         json["title"] = title.encode()
         json["command"] = command.encode()
-        // NYI(owensd): Handling of `Any` or `[Any]` is not currently supported.
-        // json["arguments"]...
+        if let arguments = arguments {
+            json["arguments"] = JSValue(arguments.map { $0.encode() })
+        }
         return json
     }
 }

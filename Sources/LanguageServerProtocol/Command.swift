@@ -7,7 +7,7 @@
 /// in the UI. Commands are identified using a string identifier and the protocol currently doesn't
 /// specify a set of well known commands. So executing a command requires some tool extension code.
 public struct Command {
-	public init(title: String, command: String, arguments: [Any]? = nil) {
+	public init(title: String, command: String, arguments: [String]? = nil) {
 		self.title = title
 		self.command = command
 		self.arguments = arguments
@@ -20,5 +20,6 @@ public struct Command {
 	public var command: String
 
 	/// Arguments that the command handler should be invoked with.
-	public var arguments: [Any]?
+	/// SpecViolation: Value should be `Any`.
+	public var arguments: [String]?
 }

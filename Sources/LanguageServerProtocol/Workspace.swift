@@ -3,13 +3,14 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+// SpecViolation: settings: Any
 public struct DidChangeConfigurationParams {
-    public init(settings: Any) {
+    public init(settings: [String:String]) {
         self.settings = settings
     }
     
 	/// The actual changed settings
-	public var settings: Any
+	public var settings: [String:String]
 }
 
 public struct DidChangeWatchedFilesParams {

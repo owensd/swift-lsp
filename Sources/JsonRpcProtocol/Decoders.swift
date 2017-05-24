@@ -239,8 +239,14 @@ extension DidChangeConfigurationParams: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
-        // TODO(owensd): Figure out how this gets decoded...
-        return DidChangeConfigurationParams(settings: "")
+        var dict = [String:String]()
+        if let settings = data["settings"].object {
+            for (key, value) in settings {
+                dict[key] = value.string ?? ""
+            }
+        }
+
+        return DidChangeConfigurationParams(settings: dict)
     }
 }
 
@@ -678,8 +684,7 @@ extension Command: Decodable {
             throw "The `command` parameter is required."
         }
 
-        // TODO(owensd): Handle the arguments array...
-    	let arguments: [Any]? = nil
+        let arguments: [String]? = data["arguments"].array?.map { $0.string ?? "" }
 
         return Command(
             title: title,
