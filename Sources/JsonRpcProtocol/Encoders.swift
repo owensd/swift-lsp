@@ -37,6 +37,15 @@ extension Int: Encodable {
     }
 }
 
+extension TextDocumentSync: Encodable {
+    public func encode() -> JSValue {
+        switch self {
+        case .options(let options): return options.encode()
+        case .kind(let kind): return kind.encode()
+        }
+    }
+}
+
 extension CodeLens: Encodable {
     public func encode() -> JSValue {
         var json: JSValue = [:]
@@ -64,7 +73,7 @@ extension Command: Encodable {
         json["title"] = title.encode()
         json["command"] = command.encode()
         if let arguments = arguments {
-            json["arguments"] = JSValue(arguments.map { $0.encode() })
+            json["arguments"] = arguments
         }
         return json
     }
@@ -133,8 +142,7 @@ extension ExecuteCommandOptions: Encodable {
         if let commands = commands {
             json["commands"] = JSValue(commands.map { $0.encode() })
         }
-        // NYI(owensd): Handling of `Any` or `[Any]` is not currently supported.
-        // json["arguments"]...
+
         return json
     }
 }
@@ -462,8 +470,10 @@ extension CompletionItem: Encodable {
         if let command = command {
             json["command"] = command.encode()
         }
-        // NYI(owensd): Handling of `Any` or `[Any]` is not currently supported.
-        // json["data"]...
+        if let data = data {
+            json["data"] = data
+        }
+
         return json
     }
 }

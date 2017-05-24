@@ -3,9 +3,11 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+import JSONLib
+
 /// General parameters to to register for a capability.
 public struct Registration {
-    public init(id: String, method: String, registerOptions: Any? = nil) {
+    public init(id: String, method: String, registerOptions: JSValue? = nil) {
         self.id = id
         self.method = method
         self.registerOptions = registerOptions
@@ -18,7 +20,8 @@ public struct Registration {
 	public var method: String
 
 	/// Options necessary for the registration.
-	public var registerOptions: Any?
+    /// SpecViolation: Value should be `Any`.
+	public var registerOptions: JSValue?
 }
 
 public struct RegistrationParams {

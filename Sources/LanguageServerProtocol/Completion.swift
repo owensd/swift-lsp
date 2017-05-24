@@ -3,6 +3,8 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+import JSONLib
+
 /// Represents a collection of [completion items](#CompletionItem) to be presented
 /// in the editor.
 public struct CompletionList {
@@ -49,7 +51,7 @@ public struct CompletionItem {
             textEdit: TextEdit? = nil, 
             additionalTextEdits: [TextEdit]? = nil, 
             command: Command? = nil,
-            data: Any? = nil) {
+            data: JSValue? = nil) {
         self.label = label
         self.kind = kind
         self.detail = detail
@@ -113,7 +115,8 @@ public struct CompletionItem {
 
     /// An data entry field that is preserved on a completion item between a completion and a
     /// completion resolve request.
-    public var data: Any?
+    /// SpecViolation: Value should be `Any`.
+    public var data: JSValue?
 }
 
 /// The kind of a completion entry.

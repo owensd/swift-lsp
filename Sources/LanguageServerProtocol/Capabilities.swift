@@ -3,6 +3,8 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+import JSONLib
+
 /// Client capabilities got introduced with the version 3.0 of the protocol. They therefore only
 /// describe capabilities that got introduced in 3.x or later. Capabilities that existed in the 2.x
 /// version of the protocol are still mandatory for clients. Clients cannot opt out of providing
@@ -13,7 +15,7 @@ public struct ClientCapabilities {
     public init(
             workspace: WorkspaceClientCapabilities? = nil,
             textDocument: TextDocumentClientCapabilities? = nil,
-            experimental: Any? = nil) {
+            experimental: JSValue? = nil) {
         self.workspace = workspace
         self.textDocument = textDocument
         self.experimental = experimental
@@ -26,7 +28,8 @@ public struct ClientCapabilities {
     public var textDocument: TextDocumentClientCapabilities?
 
     /// Experimental client capabilities.
-    public var experimental: Any?
+    /// SpecViolation: Value should be `Any`.
+    public var experimental: JSValue?
 }
 
 /// `TextDocumentClientCapabilities` define capabilities the editor/tool provides on text documents.
@@ -211,9 +214,14 @@ public struct DocumentChangesCapability {
     public var documentChanges: Bool?
 }
 
+public enum TextDocumentSync {
+    case options(TextDocumentSyncOptions)
+    case kind(TextDocumentSyncKind)
+}
+
 public struct ServerCapabilities {
     public init(
-            textDocumentSync: TextDocumentSyncOptions? = nil,
+            textDocumentSync: TextDocumentSync? = nil,
             hoverProvider: Bool? = nil,
             completionProvider: CompletionOptions? = nil,
             signatureHelpProvider: SignatureHelpOptions? = nil,
@@ -253,7 +261,7 @@ public struct ServerCapabilities {
 
     /// Defines how text documents are synced. Is either a detailed structure defining each
     /// notification or for backwards compatibility the `TextDocumentSyncKind` number.
-    public var textDocumentSync: TextDocumentSyncOptions? = nil
+    public var textDocumentSync: TextDocumentSync? = nil
 
     /// The server provides hover support.
     public var hoverProvider: Bool? = nil

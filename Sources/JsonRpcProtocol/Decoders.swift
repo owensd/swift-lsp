@@ -105,13 +105,10 @@ extension ClientCapabilities: Decodable {
         let workspace = try? WorkspaceClientCapabilities.decode(data["workspace"])
         let textDocument = try? TextDocumentClientCapabilities.decode(data["workspace"])
         
-        // TODO(owensd): Support the experimental features.
-        let experimental: Any? = nil
-
         return ClientCapabilities(
             workspace: workspace,
             textDocument: textDocument,
-            experimental: experimental)
+            experimental: data["experimental"] ?? .null)
 	}
 }
 
@@ -201,9 +198,7 @@ extension Registration: Decodable {
             throw "The `method` parameter is required."
         }
 
-        // TODO(owensd): Handle the registration options
-
-        return Registration(id: id, method: method, registerOptions: nil)
+        return Registration(id: id, method: method, registerOptions: data["registerOptions"])
     }
 }
 
@@ -630,8 +625,7 @@ extension CompletionItem: Decodable {
         }
 
     	let command = try? Command.decode(data["command"])
-        // TODO(owensd): Handle the `data` parameter
-        let data: Any? = nil
+        let data = data["data"] 
 
         return CompletionItem(
             label: label,
@@ -677,12 +671,10 @@ extension Command: Decodable {
             throw "The `command` parameter is required."
         }
 
-        let arguments: [String]? = data["arguments"].array?.map { $0.string ?? "" }
-
         return Command(
             title: title,
             command: command,
-            arguments: arguments
+            arguments: data["arguments"] ?? .null
         )
     }
 }
@@ -844,8 +836,7 @@ extension CodeLens: Decodable {
     public static func decode(_ data: JSValue?) throws -> CodeLens {
         let range = try LanguageServerProtocol.Range.decode(data["range"])
         let command = try? Command.decode(data["command"])
-        // TODO(owensd): Parse the any type...
-        let data: Any? = nil
+        let data = data["data"]
         return CodeLens(
             range: range,
             command: command,
