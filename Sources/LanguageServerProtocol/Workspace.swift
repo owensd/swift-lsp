@@ -3,14 +3,16 @@
  * Licensed under the MIT License. See License in the project root for license information.
  */
 
+import JSONLib
+
 // SpecViolation: settings: Any
 public struct DidChangeConfigurationParams {
-    public init(settings: [String:String]) {
+    public init(settings: JSValue) {
         self.settings = settings
     }
     
 	/// The actual changed settings
-	public var settings: [String:String]
+	public var settings: JSValue
 }
 
 public struct DidChangeWatchedFilesParams {

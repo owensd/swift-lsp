@@ -239,14 +239,7 @@ extension DidChangeConfigurationParams: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
-        var dict = [String:String]()
-        if let settings = data["settings"].object {
-            for (key, value) in settings {
-                dict[key] = value.string ?? ""
-            }
-        }
-
-        return DidChangeConfigurationParams(settings: dict)
+        return DidChangeConfigurationParams(settings: data ?? .null)
     }
 }
 
