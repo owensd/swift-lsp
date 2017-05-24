@@ -4,12 +4,11 @@
  */
 
 public struct DidChangeConfigurationParams {
-    public init(settings: Any) {
+    public init(settings: Encodable) {
         self.settings = settings
     }
     
-	/// The actual changed settings
-	public var settings: Any
+	public var settings: Encodable
 }
 
 public struct DidChangeWatchedFilesParams {
