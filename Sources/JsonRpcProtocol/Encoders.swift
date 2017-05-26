@@ -435,6 +435,13 @@ extension ParameterInformation: Encodable {
     }
 }
 
+extension DidChangeConfigurationParams: Encodable {
+    public func encode() -> JSValue {
+        return settings
+    }
+}
+
+
 extension CompletionItem: Encodable {
     public func encode() -> JSValue {
         var json: JSValue = [:]
