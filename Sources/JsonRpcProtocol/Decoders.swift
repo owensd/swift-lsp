@@ -234,7 +234,7 @@ extension DidChangeConfigurationParams: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
-        return DidChangeConfigurationParams(settings: data ?? .null)
+        return DidChangeConfigurationParams(settings: data?["settings"] ?? .null)
     }
 }
 
