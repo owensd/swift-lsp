@@ -10,8 +10,8 @@ public struct DidChangeConfigurationParams {
         self.settings = settings
     }
     
-	/// The actual changed settings
-	public var settings: AnyEncodable
+    /// The actual changed settings
+    public var settings: AnyEncodable
 }
 
 public struct DidChangeWatchedFilesParams {
@@ -19,8 +19,8 @@ public struct DidChangeWatchedFilesParams {
         self.changes = changes
     }
 
-	/// The actual file events.
-	public var changes: [FileEvent]
+    /// The actual file events.
+    public var changes: [FileEvent]
 }
 
 /// An event describing a file change.
@@ -30,18 +30,18 @@ public struct FileEvent {
         self.type = type
     }
 
-	/// The file's URI.
-	public var uri: DocumentUri
+    /// The file's URI.
+    public var uri: DocumentUri
 
-	/// The change type.
-	public var type: FileChangeType
+    /// The change type.
+    public var type: FileChangeType
 }
 
 /// The file event type.
 public enum FileChangeType: Int {
-	case created = 1
-	case changed = 2
-	case deleted = 3
+    case created = 1
+    case changed = 2
+    case deleted = 3
 }
 
 /// The parameters of a Workspace Symbol Request.
@@ -50,8 +50,8 @@ public struct WorkspaceSymbolParams {
         self.query = query
     }
 
-	/// A non-empty query string
-	public var query: String
+    /// A non-empty query string
+    public var query: String
 }
 
 public struct ExecuteCommandParams {
@@ -60,11 +60,11 @@ public struct ExecuteCommandParams {
         self.arguments = arguments
     }
 
-	/// The identifier of the actual command handler.
-	public var command: String
+    /// The identifier of the actual command handler.
+    public var command: String
 
-	/// Arguments that the command should be invoked with.
-	public var arguments: [String]?
+    /// Arguments that the command should be invoked with.
+    public var arguments: [String]?
 }
 
 public struct ApplyWorkspaceEditParams {
@@ -72,6 +72,6 @@ public struct ApplyWorkspaceEditParams {
         self.edit = edit
     }
     
-	/// The edits to apply.
-	public var edit: WorkspaceEdit
+    /// The edits to apply.
+    public var edit: WorkspaceEdit
 }

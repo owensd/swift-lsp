@@ -9,11 +9,11 @@ public struct DocumentFormattingParams {
         self.options = options
     }
 
-	/// The document to format.
-	public var textDocument: TextDocumentIdentifier
+    /// The document to format.
+    public var textDocument: TextDocumentIdentifier
 
-	/// The format options.
-	public var options: FormattingOptions
+    /// The format options.
+    public var options: FormattingOptions
 }
 
 /// Value-object describing what options formatting should use.
@@ -23,14 +23,14 @@ public struct FormattingOptions {
         self.insertSpaces = insertSpaces
     }
 
-	/// Size of a tab in spaces.
-	public var tabSize: Int
+    /// Size of a tab in spaces.
+    public var tabSize: Int
 
-	/// Prefer spaces over tabs.
-	public var insertSpaces: Bool
+    /// Prefer spaces over tabs.
+    public var insertSpaces: Bool
 
     // Signature for further properties.
-	//[key: string]: boolean | number | string;
+    //[key: string]: boolean | number | string;
 }
 
 public struct DocumentRangeFormattingParams {
@@ -40,14 +40,14 @@ public struct DocumentRangeFormattingParams {
         self.options = options
     }
 
-	/// The document to format.
-	public var textDocument: TextDocumentIdentifier
+    /// The document to format.
+    public var textDocument: TextDocumentIdentifier
 
-	/// The range to format
-	public var range: Range
+    /// The range to format
+    public var range: Range
 
-	/// The format options
-	public var options: FormattingOptions
+    /// The format options
+    public var options: FormattingOptions
 }
 
 public struct DocumentOnTypeFormattingParams {
@@ -58,15 +58,15 @@ public struct DocumentOnTypeFormattingParams {
         self.options = options
     }
 
-	/// The document to format.
-	public var textDocument: TextDocumentIdentifier
+    /// The document to format.
+    public var textDocument: TextDocumentIdentifier
 
-	/// The position at which this request was sent.
-	public var position: Position
+    /// The position at which this request was sent.
+    public var position: Position
 
-	/// The character that has been typed.
-	public var ch: String
+    /// The character that has been typed.
+    public var ch: String
 
-	/// The format options.
-	public var options: FormattingOptions
+    /// The format options.
+    public var options: FormattingOptions
 }

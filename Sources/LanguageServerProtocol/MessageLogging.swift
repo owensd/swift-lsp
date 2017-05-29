@@ -6,10 +6,10 @@
 
 /// The various classifications for the messages shown to the user.
 public enum MessageType: Int {
-	case error = 1
-	case warning = 2
-	case info = 3
-	case log = 4
+    case error = 1
+    case warning = 2
+    case info = 3
+    case log = 4
 }
 
 /// The show message notification is sent from a server to a client to ask the client to display a
@@ -38,13 +38,13 @@ public struct ShowMessageRequestParams {
     }
 
     /// The type of message.
-	public var type: MessageType
+    public var type: MessageType
 
     /// The message to be shown to the user.
-	public var message: String
+    public var message: String
 
-	/// The message action items to present.
-	public var actions: [MessageActionItem]?
+    /// The message action items to present.
+    public var actions: [MessageActionItem]?
 }
 
 public struct MessageActionItem {
@@ -52,8 +52,8 @@ public struct MessageActionItem {
         self.title = title
     }
     
-	/// A short title like 'Retry', 'Open Log' etc.
-	public var title: String
+    /// A short title like 'Retry', 'Open Log' etc.
+    public var title: String
 }
 
 /// The log message notification is sent from the server to the client to ask the client to log a
@@ -64,9 +64,9 @@ public struct LogMessageParams {
         self.message = message
     }
 
-	/// The type of message.
+    /// The type of message.
     public var type: MessageType
 
-	/// The content of the message to log.
-	public var message: String
+    /// The content of the message to log.
+    public var message: String
 }
