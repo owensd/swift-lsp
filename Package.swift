@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "LanguageServerProtocol",
     targets: [
-        Target(name: "LanguageServerProtocol", dependencies: []),
+        Target(name: "LanguageServerProtocol"),
         Target(name: "JsonRpcProtocol", dependencies: ["LanguageServerProtocol"])
     ],
     dependencies: [
