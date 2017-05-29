@@ -13,14 +13,14 @@ public struct Registration {
         self.registerOptions = registerOptions
     }
 
-	/// The id used to register the request. The id can be used to deregister the request again.
-	public var id: String
+    /// The id used to register the request. The id can be used to deregister the request again.
+    public var id: String
 
-	/// The method / capability to register for.
-	public var method: String
+    /// The method / capability to register for.
+    public var method: String
 
-	/// Options necessary for the registration.
-	public var registerOptions: AnyEncodable?
+    /// Options necessary for the registration.
+    public var registerOptions: AnyEncodable?
 }
 
 public struct RegistrationParams {
@@ -28,7 +28,7 @@ public struct RegistrationParams {
         self.registrations = registrations
     }
 
-	public var registrations: [Registration];
+    public var registrations: [Registration];
 }
 
 /// General parameters to unregister a capability.
@@ -38,12 +38,12 @@ public struct Unregistration {
         self.method = method
     }
 
-	/// The id used to unregister the request or notification. Usually an id provided during the
-	/// register request.
-	public var id: String
+    /// The id used to unregister the request or notification. Usually an id provided during the
+    /// register request.
+    public var id: String
 
-	/// The method / capability to unregister for.
-	public var method: String
+    /// The method / capability to unregister for.
+    public var method: String
 }
 
 public struct UnregistrationParams {
@@ -51,5 +51,5 @@ public struct UnregistrationParams {
         self.unregisterations = unregisterations
     }
 
-	public var unregisterations: [Unregistration];
+    public var unregisterations: [Unregistration];
 }

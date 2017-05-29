@@ -542,7 +542,7 @@ extension Diagnostic: Encodable {
     public func encode() -> JSValue {
         var json: JSValue = [:]
         json["range"] = range.encode()
-		json["message"] = message.encode()
+        json["message"] = message.encode()
         if let severity = severity {
             json["severity"] = severity.encode()
         }

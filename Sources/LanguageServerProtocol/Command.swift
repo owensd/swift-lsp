@@ -9,18 +9,18 @@ import JSONLib
 /// in the UI. Commands are identified using a string identifier and the protocol currently doesn't
 /// specify a set of well known commands. So executing a command requires some tool extension code.
 public struct Command {
-	public init(title: String, command: String, arguments: AnyEncodable? = nil) {
-		self.title = title
-		self.command = command
-		self.arguments = arguments
-	}
-	
-	/// Title of the command, like `save`.
-	public var title: String
+    public init(title: String, command: String, arguments: AnyEncodable? = nil) {
+        self.title = title
+        self.command = command
+        self.arguments = arguments
+    }
+    
+    /// Title of the command, like `save`.
+    public var title: String
 
     /// The identifier of the actual command handler.
-	public var command: String
+    public var command: String
 
-	/// Arguments that the command handler should be invoked with.
-	public var arguments: AnyEncodable?
+    /// Arguments that the command handler should be invoked with.
+    public var arguments: AnyEncodable?
 }

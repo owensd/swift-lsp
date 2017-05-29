@@ -323,21 +323,21 @@ public struct DocumentHighlight {
         self.kind = kind
     }
     
-	/// The range this highlight applies to.
-	public var range: Range
+    /// The range this highlight applies to.
+    public var range: Range
 
-	/// The highlight kind, default is DocumentHighlightKind.Text.
-	public var kind: DocumentHighlightKind?
+    /// The highlight kind, default is DocumentHighlightKind.Text.
+    public var kind: DocumentHighlightKind?
 }
 
 /// A document highlight kind.
 public enum DocumentHighlightKind: Int {
-	/// A textual occurrence.
-	case text = 1
+    /// A textual occurrence.
+    case text = 1
 
-	/// Read-access of a symbol, like reading a variable.
-	case read = 2
+    /// Read-access of a symbol, like reading a variable.
+    case read = 2
 
-	/// Write-access of a symbol, like writing to a variable.
-	case write = 3
+    /// Write-access of a symbol, like writing to a variable.
+    case write = 3
 }

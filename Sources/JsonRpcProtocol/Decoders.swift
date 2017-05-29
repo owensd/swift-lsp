@@ -63,16 +63,16 @@ extension TraceSetting: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TraceSetting {
-		guard let value = data.string else {
-			throw "The trace setting must be a string or not present."
-		}
-		switch value {
-		case "off": return .off
-		case "messages": return .messages
-		case "verbose": return .verbose
-		default: throw "'\(value)' is an unsupported value"
-		}
-	}
+        guard let value = data.string else {
+            throw "The trace setting must be a string or not present."
+        }
+        switch value {
+        case "off": return .off
+        case "messages": return .messages
+        case "verbose": return .verbose
+        default: throw "'\(value)' is an unsupported value"
+        }
+    }
 }
 
 extension RequestId: Decodable {
@@ -109,8 +109,8 @@ extension ClientCapabilities: Decodable {
         return ClientCapabilities(
             workspace: workspace,
             textDocument: textDocument,
-            experimental: experimental as? AnyEncodable)
-	}
+            experimental: experimental)
+    }
 }
 
 extension TextDocumentClientCapabilities: Decodable {
@@ -199,7 +199,7 @@ extension Registration: Decodable {
             throw "The `method` parameter is required."
         }
 
-        return Registration(id: id, method: method, registerOptions: data["registerOptions"] as? AnyEncodable)
+        return Registration(id: id, method: method, registerOptions: data["registerOptions"])
     }
 }
 
@@ -235,7 +235,7 @@ extension DidChangeConfigurationParams: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
-        let encodable = (data?["settings"] ?? .null) as! AnyEncodable
+        let encodable = (data?["settings"] ?? .null)
         return DidChangeConfigurationParams(settings: encodable)
     }
 }
@@ -618,7 +618,7 @@ extension CompletionItem: Decodable {
         let sortText = data["sortText"].string
         let filterText = data["filterText"].string
         let insertText = data["insertText"].string
-	    let insertTextFormat: InsertTextFormat? = nil
+        let insertTextFormat: InsertTextFormat? = nil
         let textEdit = try? TextEdit.decode(data["textEdit"])
 
         var additionalEdits: [TextEdit]? = nil
@@ -626,7 +626,7 @@ extension CompletionItem: Decodable {
             additionalEdits = try values.map(TextEdit.decode)
         }
 
-    	let command = try? Command.decode(data["command"])
+        let command = try? Command.decode(data["command"])
         let data = data["data"] 
 
         return CompletionItem(
@@ -641,7 +641,7 @@ extension CompletionItem: Decodable {
             textEdit: textEdit,
             additionalTextEdits: additionalEdits,
             command: command,
-            data: data as? AnyEncodable
+            data: data
         )
     }
 }
@@ -669,14 +669,14 @@ extension Command: Decodable {
             throw "The `title` parameter is required."
         }
 
-    	guard let command = data["command"].string else {
+        guard let command = data["command"].string else {
             throw "The `command` parameter is required."
         }
 
         return Command(
             title: title,
             command: command,
-            arguments: (data["arguments"] ?? .null) as? AnyEncodable
+            arguments: (data["arguments"] ?? .null)
         )
     }
 }
@@ -842,7 +842,7 @@ extension CodeLens: Decodable {
         return CodeLens(
             range: range,
             command: command,
-            data: data as? AnyEncodable
+            data: data
         )
     }
 }
@@ -937,10 +937,10 @@ extension SynchronizationCapability: Decodable {
 
     public static func decode(_ data: JSValue?) throws -> SynchronizationCapability {
         return SynchronizationCapability(
-			dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
-			willSave: try? Bool.decode(data["willSave"]),
-			willSaveWaitUntil: try? Bool.decode(data["willSaveWaitUntil"]),
-			didSave: try? Bool.decode(data["didSave"]))
+            dynamicRegistration: try? Bool.decode(data["dynamicRegistration"]),
+            willSave: try? Bool.decode(data["willSave"]),
+            willSaveWaitUntil: try? Bool.decode(data["willSaveWaitUntil"]),
+            didSave: try? Bool.decode(data["didSave"]))
     }
 }
 
@@ -957,11 +957,11 @@ extension WorkspaceClientCapabilities: Decodable {
 
     public static func decode(_ data: JSValue?) throws -> WorkspaceClientCapabilities {
         return WorkspaceClientCapabilities(
-			applyEdit: try? Bool.decode(data["applyEdit"]),
-			workspaceEdit: try? DocumentChangesCapability.decode(data["workspaceEdit"]),
-			didChangeConfiguration: try? DynamicRegistrationCapability.decode(data["didChangeConfiguration"]),
-			didChangeWatchedFiles: try? DynamicRegistrationCapability.decode(data["didChangeWatchedFiles"]),
-			symbol: try? DynamicRegistrationCapability.decode(data["symbol"]),
-			executeCommand: try? DynamicRegistrationCapability.decode(data["executeCommand"]))
+            applyEdit: try? Bool.decode(data["applyEdit"]),
+            workspaceEdit: try? DocumentChangesCapability.decode(data["workspaceEdit"]),
+            didChangeConfiguration: try? DynamicRegistrationCapability.decode(data["didChangeConfiguration"]),
+            didChangeWatchedFiles: try? DynamicRegistrationCapability.decode(data["didChangeWatchedFiles"]),
+            symbol: try? DynamicRegistrationCapability.decode(data["symbol"]),
+            executeCommand: try? DynamicRegistrationCapability.decode(data["executeCommand"]))
     }
 }
