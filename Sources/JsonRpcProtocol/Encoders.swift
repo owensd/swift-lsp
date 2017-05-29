@@ -13,6 +13,12 @@ import os.log
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "Encodable")
 
+extension JSValue: AnyEncodable {
+    public func encode() -> Any {
+        return self
+    }
+}
+
 extension String: Encodable {
     public func encode() -> JSValue {
         return JSValue(self)
@@ -73,7 +79,7 @@ extension Command: Encodable {
         json["title"] = title.encode()
         json["command"] = command.encode()
         if let arguments = arguments {
-            json["arguments"] = arguments
+            json["arguments"] = arguments.encode() as? JSValue
         }
         return json
     }
@@ -437,7 +443,7 @@ extension ParameterInformation: Encodable {
 
 extension DidChangeConfigurationParams: Encodable {
     public func encode() -> JSValue {
-        return settings
+        return settings.encode() as! JSValue
     }
 }
 
@@ -478,7 +484,7 @@ extension CompletionItem: Encodable {
             json["command"] = command.encode()
         }
         if let data = data {
-            json["data"] = data
+            json["data"] = data.encode() as? JSValue
         }
 
         return json
@@ -565,6 +571,17 @@ extension DiagnosticSeverity: Encodable {
     }
 }
 
+extension Registration: Encodable {
+    public func encode() -> JSValue {
+        var json: JSValue = [:]
+        json["id"] = id.encode()
+        json["method"] = method.encode()
+        if let options = registerOptions?.encode() {
+            json["registerOptions"] = options as? JSValue
+        }
+        return json
+    }
+}
 
 extension LanguageServerResponse: Encodable {
     private func encode<EncodingType>(_ requestId: RequestId, _ encodables: [EncodingType]?) -> JSValue where EncodingType: Encodable {

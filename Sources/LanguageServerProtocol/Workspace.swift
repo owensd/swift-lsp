@@ -5,14 +5,13 @@
 
 import JSONLib
 
-// SpecViolation: settings: Any
 public struct DidChangeConfigurationParams {
-    public init(settings: JSValue) {
+    public init(settings: AnyEncodable) {
         self.settings = settings
     }
     
 	/// The actual changed settings
-	public var settings: JSValue
+	public var settings: AnyEncodable
 }
 
 public struct DidChangeWatchedFilesParams {

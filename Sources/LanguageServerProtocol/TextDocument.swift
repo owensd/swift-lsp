@@ -328,7 +328,7 @@ public struct CodeLensParams {
 /// A code lens is _unresolved_ when no command is associated to it. For performance reasons the
 /// creation of a code lens and resolving should be done in two stages.
 public struct CodeLens {
-	public init(range: Range, command: Command? = nil, data: JSValue? = nil) {
+	public init(range: Range, command: Command? = nil, data: AnyEncodable? = nil) {
 		self.range = range
 		self.command = command
 		self.data = data
@@ -342,8 +342,7 @@ public struct CodeLens {
 
 	/// A data entry field that is preserved on a code lens item between
 	/// a code lens and a code lens resolve request.
-    /// SpecViolation: Value should be `Any`.
-	public var data: JSValue?
+	public var data: AnyEncodable?
 }
 
 public struct DocumentLinkParams {

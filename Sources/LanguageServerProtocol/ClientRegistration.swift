@@ -7,7 +7,7 @@ import JSONLib
 
 /// General parameters to to register for a capability.
 public struct Registration {
-    public init(id: String, method: String, registerOptions: JSValue? = nil) {
+    public init(id: String, method: String, registerOptions: AnyEncodable? = nil) {
         self.id = id
         self.method = method
         self.registerOptions = registerOptions
@@ -20,8 +20,7 @@ public struct Registration {
 	public var method: String
 
 	/// Options necessary for the registration.
-    /// SpecViolation: Value should be `Any`.
-	public var registerOptions: JSValue?
+	public var registerOptions: AnyEncodable?
 }
 
 public struct RegistrationParams {

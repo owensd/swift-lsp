@@ -15,7 +15,7 @@ public struct ClientCapabilities {
     public init(
             workspace: WorkspaceClientCapabilities? = nil,
             textDocument: TextDocumentClientCapabilities? = nil,
-            experimental: JSValue? = nil) {
+            experimental: AnyEncodable? = nil) {
         self.workspace = workspace
         self.textDocument = textDocument
         self.experimental = experimental
@@ -28,8 +28,7 @@ public struct ClientCapabilities {
     public var textDocument: TextDocumentClientCapabilities?
 
     /// Experimental client capabilities.
-    /// SpecViolation: Value should be `Any`.
-    public var experimental: JSValue?
+    public var experimental: AnyEncodable?
 }
 
 /// `TextDocumentClientCapabilities` define capabilities the editor/tool provides on text documents.

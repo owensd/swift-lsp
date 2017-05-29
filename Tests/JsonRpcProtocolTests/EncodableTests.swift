@@ -51,6 +51,24 @@ final class EncodableTests: XCTestCase {
         XCTAssertEqual(encoded["message"].string, "happy days")
     }
 
+    func testEncodable005() {
+        let options: JSValue = [
+            "hello": "world",
+            "just": [
+                "some": "data",
+                "value": 12
+            ]
+        ]
+        let registration = Registration(id: "1234", method: "complete", registerOptions: options)
+        let encoded = registration.encode()
+        XCTAssertEqual(encoded["id"].string, "1234")
+        XCTAssertEqual(encoded["method"].string, "complete")
+        XCTAssertEqual(encoded["registerOptions"]["hello"].string, "world")
+        XCTAssertEqual(encoded["registerOptions"]["just"]["some"].string, "data")
+        XCTAssertEqual(encoded["registerOptions"]["just"]["value"].integer, 12)
+    }
+
+
     static var allTests = [
         ("testEncodable001", testEncodable001),
         ("testEncodable002", testEncodable002),

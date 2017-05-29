@@ -21,6 +21,14 @@ public protocol Encodable {
     func encode() -> EncodableType
 }
 
+/// Defines a protocol that is useful when the type is not part of the known types for the Language
+/// Server Protocol. This is necessary due to limitations in Swift's type system representation.
+/// Without this, we have to expose leaky abstractions from our serialization layers, such as
+/// `JSValue`.
+public protocol AnyEncodable {
+    func encode() -> Any
+}
+
 /// Defines a generic protocol used to decode a given type into the data necessary for use within
 /// the `MessageProtocol` layers.
 public protocol Decodable {

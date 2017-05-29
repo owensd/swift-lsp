@@ -104,11 +104,12 @@ extension ClientCapabilities: Decodable {
     public static func decode(_ data: JSValue?) throws -> ClientCapabilities {
         let workspace = try? WorkspaceClientCapabilities.decode(data["workspace"])
         let textDocument = try? TextDocumentClientCapabilities.decode(data["workspace"])
-        
+        let experimental = data["experimental"] ?? .null
+
         return ClientCapabilities(
             workspace: workspace,
             textDocument: textDocument,
-            experimental: data["experimental"] ?? .null)
+            experimental: experimental as? AnyEncodable)
 	}
 }
 
@@ -198,7 +199,7 @@ extension Registration: Decodable {
             throw "The `method` parameter is required."
         }
 
-        return Registration(id: id, method: method, registerOptions: data["registerOptions"])
+        return Registration(id: id, method: method, registerOptions: data["registerOptions"] as? AnyEncodable)
     }
 }
 
@@ -234,7 +235,8 @@ extension DidChangeConfigurationParams: Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
-        return DidChangeConfigurationParams(settings: data?["settings"] ?? .null)
+        let encodable = (data?["settings"] ?? .null) as! AnyEncodable
+        return DidChangeConfigurationParams(settings: encodable)
     }
 }
 
@@ -639,7 +641,7 @@ extension CompletionItem: Decodable {
             textEdit: textEdit,
             additionalTextEdits: additionalEdits,
             command: command,
-            data: data
+            data: data as? AnyEncodable
         )
     }
 }
@@ -674,7 +676,7 @@ extension Command: Decodable {
         return Command(
             title: title,
             command: command,
-            arguments: data["arguments"] ?? .null
+            arguments: (data["arguments"] ?? .null) as? AnyEncodable
         )
     }
 }
@@ -840,7 +842,7 @@ extension CodeLens: Decodable {
         return CodeLens(
             range: range,
             command: command,
-            data: data
+            data: data as? AnyEncodable
         )
     }
 }

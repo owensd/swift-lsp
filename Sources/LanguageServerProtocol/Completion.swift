@@ -51,7 +51,7 @@ public struct CompletionItem {
             textEdit: TextEdit? = nil, 
             additionalTextEdits: [TextEdit]? = nil, 
             command: Command? = nil,
-            data: JSValue? = nil) {
+            data: AnyEncodable? = nil) {
         self.label = label
         self.kind = kind
         self.detail = detail
@@ -115,8 +115,7 @@ public struct CompletionItem {
 
     /// An data entry field that is preserved on a completion item between a completion and a
     /// completion resolve request.
-    /// SpecViolation: Value should be `Any`.
-    public var data: JSValue?
+    public var data: AnyEncodable?
 }
 
 /// The kind of a completion entry.
