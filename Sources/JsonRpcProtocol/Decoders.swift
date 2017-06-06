@@ -14,7 +14,7 @@ import JSONLib
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Serialization")
 
-extension Bool: Decodable {
+extension Bool: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Bool {
@@ -25,7 +25,7 @@ extension Bool: Decodable {
     }
 }
 
-extension String: Decodable {
+extension String: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> String {
@@ -59,7 +59,7 @@ extension InitializeParams {
     }
 }
 
-extension TraceSetting: Decodable {
+extension TraceSetting: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TraceSetting {
@@ -75,7 +75,7 @@ extension TraceSetting: Decodable {
     }
 }
 
-extension RequestId: Decodable {
+extension RequestId: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> RequestId {
@@ -90,7 +90,7 @@ extension RequestId: Decodable {
     }
 }
 
-extension CancelParams: Decodable {
+extension CancelParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CancelParams {
@@ -98,7 +98,7 @@ extension CancelParams: Decodable {
     }
 }
 
-extension ClientCapabilities: Decodable {
+extension ClientCapabilities: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ClientCapabilities {
@@ -113,7 +113,7 @@ extension ClientCapabilities: Decodable {
     }
 }
 
-extension TextDocumentClientCapabilities: Decodable {
+extension TextDocumentClientCapabilities: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentClientCapabilities {
@@ -125,7 +125,7 @@ extension TextDocumentClientCapabilities: Decodable {
     }
 }
 
-extension ShowMessageParams: Decodable {
+extension ShowMessageParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ShowMessageParams {
@@ -140,7 +140,7 @@ extension ShowMessageParams: Decodable {
     }
 }
 
-extension ShowMessageRequestParams: Decodable {
+extension ShowMessageRequestParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ShowMessageRequestParams {
@@ -160,7 +160,7 @@ extension ShowMessageRequestParams: Decodable {
     }
 }
 
-extension LogMessageParams: Decodable {
+extension LogMessageParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> LogMessageParams {
@@ -175,7 +175,7 @@ extension LogMessageParams: Decodable {
     }
 }
 
-extension RegistrationParams: Decodable {
+extension RegistrationParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> RegistrationParams {
@@ -188,7 +188,7 @@ extension RegistrationParams: Decodable {
     }
 }
 
-extension Registration: Decodable {
+extension Registration: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Registration {
@@ -203,7 +203,7 @@ extension Registration: Decodable {
     }
 }
 
-extension UnregistrationParams: Decodable {
+extension UnregistrationParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> UnregistrationParams {
@@ -216,7 +216,7 @@ extension UnregistrationParams: Decodable {
     }
 }
 
-extension Unregistration: Decodable {
+extension Unregistration: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Unregistration {
@@ -231,7 +231,7 @@ extension Unregistration: Decodable {
     }
 }
 
-extension DidChangeConfigurationParams: Decodable {
+extension DidChangeConfigurationParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeConfigurationParams {
@@ -240,7 +240,7 @@ extension DidChangeConfigurationParams: Decodable {
     }
 }
 
-extension DidChangeWatchedFilesParams: Decodable {
+extension DidChangeWatchedFilesParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeWatchedFilesParams {
@@ -253,7 +253,7 @@ extension DidChangeWatchedFilesParams: Decodable {
     }
 }
 
-extension FileEvent: Decodable {
+extension FileEvent: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> FileEvent {
@@ -266,7 +266,7 @@ extension FileEvent: Decodable {
     }
 }
 
-extension FileChangeType: Decodable {
+extension FileChangeType: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> FileChangeType {
@@ -282,7 +282,7 @@ extension FileChangeType: Decodable {
     }
 }
 
-extension WorkspaceSymbolParams: Decodable {
+extension WorkspaceSymbolParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> WorkspaceSymbolParams {
@@ -294,7 +294,7 @@ extension WorkspaceSymbolParams: Decodable {
     }
 }
 
-extension ExecuteCommandParams: Decodable {
+extension ExecuteCommandParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ExecuteCommandParams {
@@ -311,7 +311,7 @@ extension ExecuteCommandParams: Decodable {
     }
 }
 
-extension ApplyWorkspaceEditParams: Decodable {
+extension ApplyWorkspaceEditParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ApplyWorkspaceEditParams {
@@ -320,7 +320,7 @@ extension ApplyWorkspaceEditParams: Decodable {
     }
 }
 
-extension WorkspaceEdit: Decodable {
+extension WorkspaceEdit: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> WorkspaceEdit {
@@ -336,7 +336,7 @@ extension WorkspaceEdit: Decodable {
     }
 }
 
-extension TextDocumentEdit: Decodable {
+extension TextDocumentEdit: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentEdit {
@@ -349,7 +349,7 @@ extension TextDocumentEdit: Decodable {
     }
 }
 
-extension TextDocumentIdentifier: Decodable {
+extension TextDocumentIdentifier: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentIdentifier {
@@ -360,7 +360,7 @@ extension TextDocumentIdentifier: Decodable {
     }
 }
 
-extension VersionedTextDocumentIdentifier: Decodable {
+extension VersionedTextDocumentIdentifier: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> VersionedTextDocumentIdentifier {
@@ -373,7 +373,7 @@ extension VersionedTextDocumentIdentifier: Decodable {
     }
 }
 
-extension TextEdit: Decodable {
+extension TextEdit: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextEdit {
@@ -386,7 +386,7 @@ extension TextEdit: Decodable {
     }
 }
 
-extension LanguageServerProtocol.Range: Decodable {
+extension LanguageServerProtocol.Range: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> LanguageServerProtocol.Range {
@@ -396,7 +396,7 @@ extension LanguageServerProtocol.Range: Decodable {
     }
 }
 
-extension Position: Decodable {
+extension Position: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Position {
@@ -411,7 +411,7 @@ extension Position: Decodable {
     }
 }
 
-extension PublishDiagnosticsParams: Decodable {
+extension PublishDiagnosticsParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> PublishDiagnosticsParams {
@@ -426,7 +426,7 @@ extension PublishDiagnosticsParams: Decodable {
     }
 }
 
-extension Diagnostic: Decodable {
+extension Diagnostic: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Diagnostic {
@@ -449,7 +449,7 @@ extension Diagnostic: Decodable {
     }
 }
 
-extension DiagnosticSeverity: Decodable {
+extension DiagnosticSeverity: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DiagnosticSeverity {
@@ -464,7 +464,7 @@ extension DiagnosticSeverity: Decodable {
     }
 }
 
-extension DiagnosticCode: Decodable {
+extension DiagnosticCode: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DiagnosticCode {
@@ -479,7 +479,7 @@ extension DiagnosticCode: Decodable {
     }
 }
 
-extension DidOpenTextDocumentParams: Decodable {
+extension DidOpenTextDocumentParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidOpenTextDocumentParams {
@@ -488,7 +488,7 @@ extension DidOpenTextDocumentParams: Decodable {
     }
 }
 
-extension TextDocumentItem: Decodable {
+extension TextDocumentItem: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentItem {
@@ -517,7 +517,7 @@ extension TextDocumentItem: Decodable {
     }
 }
 
-extension DidChangeTextDocumentParams: Decodable {
+extension DidChangeTextDocumentParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidChangeTextDocumentParams {
@@ -533,7 +533,7 @@ extension DidChangeTextDocumentParams: Decodable {
     }
 }
 
-extension TextDocumentContentChangeEvent: Decodable {
+extension TextDocumentContentChangeEvent: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentContentChangeEvent {
@@ -552,7 +552,7 @@ extension TextDocumentContentChangeEvent: Decodable {
     }
 }
 
-extension WillSaveTextDocumentParams: Decodable {
+extension WillSaveTextDocumentParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> WillSaveTextDocumentParams {
@@ -566,7 +566,7 @@ extension WillSaveTextDocumentParams: Decodable {
     }
 }
 
-extension TextDocumentSaveReason: Decodable {
+extension TextDocumentSaveReason: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentSaveReason {
@@ -581,7 +581,7 @@ extension TextDocumentSaveReason: Decodable {
     }
 }
 
-extension DidSaveTextDocumentParams: Decodable {
+extension DidSaveTextDocumentParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidSaveTextDocumentParams {
@@ -595,7 +595,7 @@ extension DidSaveTextDocumentParams: Decodable {
     }
 }
 
-extension DidCloseTextDocumentParams: Decodable {
+extension DidCloseTextDocumentParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DidCloseTextDocumentParams {
@@ -604,7 +604,7 @@ extension DidCloseTextDocumentParams: Decodable {
     }
 }
 
-extension CompletionItem: Decodable {
+extension CompletionItem: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CompletionItem {
@@ -646,7 +646,7 @@ extension CompletionItem: Decodable {
     }
 }
 
-extension CompletionItemKind: Decodable {
+extension CompletionItemKind: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CompletionItemKind {
@@ -661,7 +661,7 @@ extension CompletionItemKind: Decodable {
     }
 }
 
-extension Command: Decodable {
+extension Command: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> Command {
@@ -681,7 +681,7 @@ extension Command: Decodable {
     }
 }
 
-extension TextDocumentPositionParams: Decodable {
+extension TextDocumentPositionParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> TextDocumentPositionParams {
@@ -694,7 +694,7 @@ extension TextDocumentPositionParams: Decodable {
     }
 }
 
-extension ReferenceParams: Decodable {
+extension ReferenceParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ReferenceParams {
@@ -709,7 +709,7 @@ extension ReferenceParams: Decodable {
     }
 }
 
-extension ReferenceContext: Decodable {
+extension ReferenceContext: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> ReferenceContext {
@@ -721,7 +721,7 @@ extension ReferenceContext: Decodable {
     }
 }
 
-extension DocumentSymbolParams: Decodable {
+extension DocumentSymbolParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentSymbolParams {
@@ -730,7 +730,7 @@ extension DocumentSymbolParams: Decodable {
     }
 }
 
-extension DocumentFormattingParams: Decodable {
+extension DocumentFormattingParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentFormattingParams {
@@ -743,7 +743,7 @@ extension DocumentFormattingParams: Decodable {
     }
 }
 
-extension FormattingOptions: Decodable {
+extension FormattingOptions: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> FormattingOptions {
@@ -761,7 +761,7 @@ extension FormattingOptions: Decodable {
     }
 }
 
-extension DocumentRangeFormattingParams: Decodable {
+extension DocumentRangeFormattingParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentRangeFormattingParams {
@@ -776,7 +776,7 @@ extension DocumentRangeFormattingParams: Decodable {
     }
 }
 
-extension DocumentOnTypeFormattingParams: Decodable {
+extension DocumentOnTypeFormattingParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentOnTypeFormattingParams {
@@ -795,7 +795,7 @@ extension DocumentOnTypeFormattingParams: Decodable {
     }
 }
 
-extension CodeActionParams: Decodable {
+extension CodeActionParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CodeActionParams {
@@ -810,7 +810,7 @@ extension CodeActionParams: Decodable {
     }
 }
 
-extension CodeActionContext: Decodable {
+extension CodeActionContext: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CodeActionContext {
@@ -823,7 +823,7 @@ extension CodeActionContext: Decodable {
     }
 }
 
-extension CodeLensParams: Decodable {
+extension CodeLensParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CodeLensParams {
@@ -832,7 +832,7 @@ extension CodeLensParams: Decodable {
     }
 }
 
-extension CodeLens: Decodable {
+extension CodeLens: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CodeLens {
@@ -847,7 +847,7 @@ extension CodeLens: Decodable {
     }
 }
 
-extension DocumentLinkParams: Decodable {
+extension DocumentLinkParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentLinkParams {
@@ -856,7 +856,7 @@ extension DocumentLinkParams: Decodable {
     }
 }
 
-extension DocumentLink: Decodable {
+extension DocumentLink: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentLink {
@@ -867,7 +867,7 @@ extension DocumentLink: Decodable {
     }
 }
 
-extension RenameParams: Decodable {
+extension RenameParams: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> RenameParams {
@@ -879,7 +879,7 @@ extension RenameParams: Decodable {
     }
 }
 
-extension MessageType: Decodable {
+extension MessageType: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> MessageType {
@@ -897,7 +897,7 @@ extension MessageType: Decodable {
     }
 }
 
-extension MessageActionItem: Decodable {
+extension MessageActionItem: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> MessageActionItem {
@@ -905,7 +905,7 @@ extension MessageActionItem: Decodable {
     }
 }
 
-extension DynamicRegistrationCapability: Decodable {
+extension DynamicRegistrationCapability: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DynamicRegistrationCapability {
@@ -914,7 +914,7 @@ extension DynamicRegistrationCapability: Decodable {
     }
 }
 
-extension CompletionCapability: Decodable {
+extension CompletionCapability: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CompletionCapability {
@@ -924,7 +924,7 @@ extension CompletionCapability: Decodable {
     }
 }
 
-extension CompletionItemCapability: Decodable {
+extension CompletionItemCapability: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> CompletionItemCapability {
@@ -932,7 +932,7 @@ extension CompletionItemCapability: Decodable {
     }
 }
 
-extension SynchronizationCapability: Decodable {
+extension SynchronizationCapability: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> SynchronizationCapability {
@@ -944,7 +944,7 @@ extension SynchronizationCapability: Decodable {
     }
 }
 
-extension DocumentChangesCapability: Decodable {
+extension DocumentChangesCapability: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> DocumentChangesCapability {
@@ -952,7 +952,7 @@ extension DocumentChangesCapability: Decodable {
     }
 }
 
-extension WorkspaceClientCapabilities: Decodable {
+extension WorkspaceClientCapabilities: LanguageServerProtocol.Decodable {
     public typealias EncodableType = JSValue
 
     public static func decode(_ data: JSValue?) throws -> WorkspaceClientCapabilities {
