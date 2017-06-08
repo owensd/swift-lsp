@@ -361,7 +361,7 @@ extension MarkedString: Encodable {
         case let .code(language, value):
             return [
                 "language": JSValue(language),
-                "code": JSValue(value)
+                "value": JSValue(value)
             ]
         }
     }
