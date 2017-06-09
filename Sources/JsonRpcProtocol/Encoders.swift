@@ -585,10 +585,15 @@ extension Registration: Encodable {
 
 extension LanguageServerResponse: Encodable {
     private func encode<EncodingType>(_ requestId: RequestId, _ encodables: [EncodingType]?) -> JSValue where EncodingType: Encodable {
+        var result: JSValue = nil
+        if let e = encodables {
+            result = JSValue(e.map { $0.encode() as! JSValue })
+        }
+
         return [
             "jsonrpc": "2.0",
             "id": requestId.encode(),
-            "result": /* FIX THIS!! encodables?.encode() ?? */ nil]
+            "result": result]
     }
 
     private func encode<EncodingType>(_ requestId: RequestId, _ encodable: EncodingType?) -> JSValue where EncodingType: Encodable {
