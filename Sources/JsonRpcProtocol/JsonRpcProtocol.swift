@@ -28,10 +28,7 @@ public final class JsonRpcProtocol: MessageProtocol {
         protocols["exit"] = general(exit:)
         protocols["$/cancelRequest"] = general(cancelRequest:)
 
-        protocols["window/showMessage"] = window(showMessage:)
         protocols["window/showMessageRequest"] = window(showMessageRequest:)
-        protocols["window/logMessage"] = window(logMessage:)
-        protocols["telemetry/event"] = telemetry(event:)
 
         protocols["client/registerCapability"] = client(registerCapability:)
         protocols["client/unregisterCapability"] = client(unregisterCapability:)
@@ -42,7 +39,6 @@ public final class JsonRpcProtocol: MessageProtocol {
         protocols["workspace/executeCommand"] = workspace(executeCommand:)
         protocols["workspace/applyEdit"] = workspace(applyEdit:)
 
-        protocols["textDocument/publishDiagnostics"] = textDocument(publishDiagnostics:)
         protocols["textDocument/didOpen"] = textDocument(didOpen:)
         protocols["textDocument/didChange"] = textDocument(didChange:)
         protocols["textDocument/willSave"] = textDocument(willSave:)
@@ -131,22 +127,10 @@ public final class JsonRpcProtocol: MessageProtocol {
         return .cancelRequest(params: try CancelParams.decode(json["params"]))
     }
 
-    private func window(showMessage json: JSValue) throws -> LanguageServerCommand {
-        return .windowShowMessage(params: try ShowMessageParams.decode(json["params"]))
-    }
-
     private func window(showMessageRequest json: JSValue) throws -> LanguageServerCommand {
         return .windowShowMessageRequest(
             requestId: try RequestId.decode(json["id"]),
             params: try ShowMessageRequestParams.decode(json["params"]))
-    }
-
-    private func window(logMessage json: JSValue) throws -> LanguageServerCommand {
-        return .windowLogMessage(params: try LogMessageParams.decode(json["params"]))
-    }
-
-    private func telemetry(event json: JSValue) throws -> LanguageServerCommand {
-        return .telemetryEvent(params: try LogMessageParams.decode(json["params"]))
     }
 
     private func client(registerCapability json: JSValue) throws -> LanguageServerCommand {
@@ -185,10 +169,6 @@ public final class JsonRpcProtocol: MessageProtocol {
         return .workspaceApplyEdit(
             requestId: try RequestId.decode(json["id"]),
             params: try ApplyWorkspaceEditParams.decode(json["params"]))
-    }
-
-    private func textDocument(publishDiagnostics json: JSValue) throws -> LanguageServerCommand {
-        return .textDocumentPublishDiagnostics(params: try PublishDiagnosticsParams.decode(json["params"]))
     }
 
     private func textDocument(didOpen json: JSValue) throws -> LanguageServerCommand {

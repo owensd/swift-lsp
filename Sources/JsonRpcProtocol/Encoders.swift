@@ -583,6 +583,33 @@ extension Registration: Encodable {
     }
 }
 
+extension ShowMessageParams: Encodable {
+    public func encode() -> JSValue {
+        var json: JSValue = [:]
+        json["type"] = type.encode()
+        json["message"] = message.encode()
+        return json
+    }
+}
+
+extension LogMessageParams: Encodable {
+    public func encode() -> JSValue {
+        var json: JSValue = [:]
+        json["type"] = type.encode()
+        json["message"] = message.encode()
+        return json
+    }
+}
+
+extension PublishDiagnosticsParams: Encodable {
+    public func encode() -> JSValue {
+        var json: JSValue = [:]
+        json["uri"] = uri.encode()
+        json["diagnostics"] = JSValue(diagnostics.map { $0.encode() })
+        return json
+    }
+}
+
 extension LanguageServerResponse: Encodable {
     private func encode<EncodingType>(_ requestId: RequestId, _ encodables: [EncodingType]?) -> JSValue where EncodingType: Encodable {
         var result: JSValue = nil
@@ -608,6 +635,13 @@ extension LanguageServerResponse: Encodable {
             "jsonrpc": "2.0",
             "id": requestId.encode(),
             "result": nil]
+    }
+
+    private func encode<EncodingType>(_ method: String, _ encodable: EncodingType) -> JSValue where EncodingType: Encodable {
+        return [
+            "jsonrpc": "2.0",
+            "method": JSValue(method),
+            "params": encodable.encode() as! JSValue]
     }
 
     public func encode() -> JSValue {
@@ -642,6 +676,14 @@ extension LanguageServerResponse: Encodable {
         case let .textDocumentCodeLens(requestId, result): return encode(requestId, result)
         case let .textDocumentDocumentLink(requestId, result): return encode(requestId, result)
         case let .textDocumentRename(requestId, result): return encode(requestId, result)
+
+        case let .windowShowMessage(params): return encode("window/showMessage", params)
+        case let .windowLogMessage(params): return encode("window/logMessage", params)
+        case .telemetryEvent(_):
+            var json: JSValue = [:]
+            json["message"] = "telemetry/event is not currently supported."
+            return json
+        case let .textDocumentPublishDiagnostics(params): return encode("textDocument/publishDiagnostics", params)
         }
     }
 }

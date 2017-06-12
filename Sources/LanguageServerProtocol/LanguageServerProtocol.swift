@@ -160,10 +160,7 @@ public enum LanguageServerCommand {
     case exit
     case cancelRequest(params: CancelParams)
 
-    case windowShowMessage(params: ShowMessageParams)
     case windowShowMessageRequest(requestId: RequestId, params: ShowMessageRequestParams)
-    case windowLogMessage(params: LogMessageParams)
-    case telemetryEvent(params: Any)
 
     case clientRegisterCapability(requestId: RequestId, params: RegistrationParams)
     case clientUnregisterCapability(requestId: RequestId, params: UnregistrationParams)
@@ -174,7 +171,6 @@ public enum LanguageServerCommand {
     case workspaceExecuteCommand(requestId: RequestId, params: ExecuteCommandParams)
     case workspaceApplyEdit(requestId: RequestId, params: ApplyWorkspaceEditParams)
 
-    case textDocumentPublishDiagnostics(params: PublishDiagnosticsParams)
     case textDocumentDidOpen(params: DidOpenTextDocumentParams)
     case textDocumentDidChange(params: DidChangeTextDocumentParams)
     case textDocumentWillSave(params: WillSaveTextDocumentParams)
@@ -231,6 +227,13 @@ public enum LanguageServerResponse {
     case textDocumentCodeLens(requestId: RequestId, result: [CodeLens])
     case textDocumentDocumentLink(requestId: RequestId, result: [DocumentLink]?)
     case textDocumentRename(requestId: RequestId, result: WorkspaceEdit)
+
+    // The set of "responses" that are simply initiated from the server; no request from the client
+    // is necessary.
+    case windowShowMessage(params: ShowMessageParams)
+    case windowLogMessage(params: LogMessageParams)
+    case telemetryEvent(params: AnyEncodable)
+    case textDocumentPublishDiagnostics(params: PublishDiagnosticsParams)
 }
 
 
