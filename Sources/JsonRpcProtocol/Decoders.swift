@@ -46,7 +46,7 @@ extension InitializeParams {
         //let initializationOptions = try type(of: initializationOptions).decode(json["initializationOptions"])
         let initializationOptions: Any? = nil
         let capabilities = try ClientCapabilities.decode(data["capabilities"])
-        let trace = try TraceSetting.decode(data["trace"])
+        let trace = try data["trace"].map { try TraceSetting.decode($0) }
 
         return InitializeParams(
             processId: processId,
