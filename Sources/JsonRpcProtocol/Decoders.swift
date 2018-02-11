@@ -14,6 +14,8 @@ import JSONLib
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.languageserverprotocol", category: "Serialization")
 
+typealias Decodable = LanguageServerProtocol.Decodable
+
 extension Bool: Decodable {
     public typealias EncodableType = JSValue
 
