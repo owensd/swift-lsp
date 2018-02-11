@@ -13,6 +13,8 @@ import os.log
 @available(macOS 10.12, *)
 fileprivate let log = OSLog(subsystem: "com.kiadstudios.jsonrpcprotocol", category: "Encodable")
 
+typealias Encodable = LanguageServerProtocol.Encodable
+
 extension JSValue: AnyEncodable {
     public func encode() -> Any {
         return self
